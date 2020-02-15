@@ -33,3 +33,5 @@ build/
 #flyway.conf
 private.properties
 #application.properties
+
+*.log
