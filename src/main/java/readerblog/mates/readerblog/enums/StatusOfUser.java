@@ -1,5 +1,9 @@
 package readerblog.mates.readerblog.enums;
 
+/**
+ * Author: Apopoff
+ */
+
 public enum StatusOfUser {
     ACTIVE              ("ACTIVE"),
     HAS_SOME_WARNING    ("HAS_SOME_WARNING"),
