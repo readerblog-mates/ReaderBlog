@@ -1,7 +1,7 @@
 package readerblog.mates.readerblog.enums;
 
 /**
- * Author: Apopoff
+ * @Author: Apopoff
  */
 
 public enum StatusOfUser {
