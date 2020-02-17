@@ -8,6 +8,10 @@ import readerblog.mates.readerblog.repositories.BookRepository;
 
 import java.util.List;
 
+/**
+ * @author mzheldin@yandex.ru
+ */
+
 @Service
 public class BookServiceImpl implements BookService {
 

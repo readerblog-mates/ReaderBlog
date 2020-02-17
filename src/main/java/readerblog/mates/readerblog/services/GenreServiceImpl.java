@@ -8,6 +8,10 @@ import readerblog.mates.readerblog.repositories.GenreRepository;
 
 import java.util.List;
 
+/**
+ * @author mzheldin@yandex.ru
+ */
+
 @Service
 public class GenreServiceImpl implements GenreService {
 

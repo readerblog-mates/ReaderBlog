@@ -8,6 +8,10 @@ import readerblog.mates.readerblog.repositories.CategoryRepository;
 
 import java.util.List;
 
+/**
+ * @author mzheldin@yandex.ru
+ */
+
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
