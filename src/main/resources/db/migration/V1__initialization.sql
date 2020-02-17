@@ -230,3 +230,15 @@ CREATE TABLE feedback_users(
 
 INSERT INTO feedback_users(feedback_id, user_id)
 values(1, 1);
+
+DROP TABLE IF EXISTS authors_books;
+
+CREATE TABLE authors_books(
+    author_id	bigint NOT NULL,
+    book_id		bigint NOT NULL,
+    PRIMARY KEY (author_id, book_id),
+    FOREIGN KEY (author_id) REFERENCES authors (id),
+    FOREIGN KEY (book_id) REFERENCES books (id)
+);
+
+INSERT INTO authors_books(author_id, book_id) VALUES (1, 1);
