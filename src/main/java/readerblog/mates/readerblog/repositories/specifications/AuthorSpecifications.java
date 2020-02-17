@@ -1,13 +1,11 @@
 package readerblog.mates.readerblog.repositories.specifications;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.services.AuthorService;
-import readerblog.mates.readerblog.services.BookService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
