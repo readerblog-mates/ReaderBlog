@@ -1,3 +1,11 @@
+-- *new password for user postgres
+-- ALTER USER postgres PASSWORD 'admin';
+
+-- DROP SCHEMA IF EXISTS readerblog CASCADE;
+-- CREATE SCHEMA readerblog;
+
+-- SET search_path TO readerblog;
+
 DROP TABLE IF EXISTS authors;
 
 CREATE TABLE authors (

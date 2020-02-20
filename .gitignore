@@ -30,7 +30,8 @@ build/
 ### VS Code ###
 .vscode/
 
-flyway.conf
-
+#flyway.conf
 private.properties
-application.properties
+#application.properties
+
+*.log
