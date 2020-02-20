@@ -153,4 +153,23 @@ public class AuthorServiceImpl implements AuthorService {
             return BigDecimal.valueOf(rating).setScale(1, RoundingMode.HALF_UP).doubleValue();
         return null;
     }
+
+    @Transactional
+    public List<Author> findByLastNameFirstLetter(Character firstLetter){
+        return authorRepository.findByLastNameStartingWith(firstLetter);
+    }
+
+    @Transactional
+    public List<Author> findAllOrderByLastName(){
+        return authorRepository.findAllByOrderByLastName();
+    }
+
+    @Transactional
+    public void updateRating(Long id, Double rating){
+        //Проверка значения не помешает, хотя может именно здесь это будет излишне?
+        if (rating > 5.0 || rating < 0.0) throw new IllegalArgumentException();
+        Author author = findOneById(id);
+        author.setRating(rating);
+        save(author);
+    }
 }
