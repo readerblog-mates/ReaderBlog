@@ -1,11 +1,3 @@
--- *new password for user postgres
--- ALTER USER postgres PASSWORD 'admin';
-
--- DROP SCHEMA IF EXISTS readerblog CASCADE;
--- CREATE SCHEMA readerblog;
-
--- SET search_path TO readerblog;
-
 
 DROP TABLE IF EXISTS authors;
 CREATE TABLE authors
@@ -66,11 +58,29 @@ CREATE TABLE users
     nick_name  VARCHAR(50) UNIQUE,
     password   VARCHAR(80),
     email      VARCHAR(50) UNIQUE,
-    role       int NOT NULL,
-    FOREIGN KEY (role) REFERENCES roles (id)
+    email_verified BOOLEAN
 );
-INSERT INTO users (first_name, last_name, nick_name, password, email, role)
-VALUES ('Admin', 'Admin', 'admin', '100', 'admin@gmail.com', 4);
+INSERT INTO users (first_name, last_name, nick_name, password, email)
+VALUES ('Admin', 'Admin', 'admin', '100', 'admin@gmail.com');
+
+
+CREATE TABLE users_roles (
+     user_id  BIGSERIAL NOT NULL,
+     role_id   SERIAL NOT NULL,
+    PRIMARY KEY (user_id,role_id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (role_id)  REFERENCES roles (id)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+INSERT INTO users_roles (user_id, role_id)
+VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4);
+
 
 
 DROP TABLE IF EXISTS books;
