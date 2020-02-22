@@ -1,4 +1,4 @@
-package readerblog.mates.readerblog.util;
+package readerblog.mates.readerblog.utils;
 
 import org.springframework.util.SerializationUtils;
 import javax.servlet.http.Cookie;

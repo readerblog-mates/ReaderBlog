@@ -1,7 +1,7 @@
 package readerblog.mates.readerblog.security.oauth2;
 
 import readerblog.mates.readerblog.exception.OAuth2AuthenticationProcessingException;
-import readerblog.mates.readerblog.model.AuthProvider;
+import readerblog.mates.readerblog.entities.AuthProvider;
 import readerblog.mates.readerblog.security.oauth2.user.FacebookOAuth2UserInfo;
 import readerblog.mates.readerblog.security.oauth2.user.GithubOAuth2UserInfo;
 import readerblog.mates.readerblog.security.oauth2.user.GoogleOAuth2UserInfo;

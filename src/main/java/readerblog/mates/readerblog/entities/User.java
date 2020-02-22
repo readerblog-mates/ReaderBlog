@@ -3,14 +3,16 @@ package readerblog.mates.readerblog.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import readerblog.mates.readerblog.enums.StatusOfUser;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Sergey Petukhov
+ * @author @mikovic5 
  */
 
 @Data
@@ -22,26 +24,42 @@ import java.util.Map;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"nick_name", "email"})}
 )
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "nick_name")
+    @Column(name = "nick_name", nullable = false)
     private String nickName;
-
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Email
+    @Column(name = "email",nullable = false)
     private String email;
+
+    @Column(name = "email_verified")
+    private Boolean emailVerified = false;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
+
+    private String imageUrl;
+
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
     /* TODO автор точно уверен в этой конструкции? */
     @OneToOne(optional = false, fetch = FetchType.EAGER)
@@ -49,7 +67,7 @@ public class User {
     private Role role;
 
     /*TODO поля нет в БД так и должно быть?*/
-    private StatusOfUser status;
+//    private StatusOfUser status;
 
     /**
      * @return - information about user by nick
@@ -60,11 +78,10 @@ public class User {
         info.put("last_name", lastName);
         info.put("nick_name", nickName);
         info.put("email", email);
-        info.put("role", StatusOfUser.valueOf("name").toString());
+        /*info.put("role", StatusOfUser.valueOf("name").toString());*/
         return info;
     }
 
 // методы изменения статуса, изменения роли, никнейма и пароля
 
 }
-

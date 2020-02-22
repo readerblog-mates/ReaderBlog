@@ -11,18 +11,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import readerblog.mates.readerblog.entities.User;
 import readerblog.mates.readerblog.exception.BadRequestException;
-import readerblog.mates.readerblog.model.AuthProvider;
-import readerblog.mates.readerblog.model.User;
+import readerblog.mates.readerblog.entities.AuthProvider;
 
 import readerblog.mates.readerblog.payload.AuthResponse;
 import readerblog.mates.readerblog.payload.LoginRequest;
 import readerblog.mates.readerblog.payload.SignUpRequest;
-import readerblog.mates.readerblog.repository.UserRepository;
+import readerblog.mates.readerblog.repositories.UserRepository;
 import readerblog.mates.readerblog.security.TokenProvider;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @Controller
 @RequestMapping("/auth")

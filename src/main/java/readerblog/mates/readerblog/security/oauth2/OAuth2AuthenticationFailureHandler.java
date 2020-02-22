@@ -5,7 +5,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-import readerblog.mates.readerblog.util.CookieUtils;
+import readerblog.mates.readerblog.utils.CookieUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

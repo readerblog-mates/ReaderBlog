@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import readerblog.mates.readerblog.config.AppProperties;
 import readerblog.mates.readerblog.exception.BadRequestException;
 import readerblog.mates.readerblog.security.TokenProvider;
-import readerblog.mates.readerblog.util.CookieUtils;
+import readerblog.mates.readerblog.utils.CookieUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

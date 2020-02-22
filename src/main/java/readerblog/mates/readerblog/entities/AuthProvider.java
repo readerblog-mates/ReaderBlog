@@ -1,4 +1,4 @@
-package readerblog.mates.readerblog.model;
+package readerblog.mates.readerblog.entities;
 
 public enum  AuthProvider {
     local,
