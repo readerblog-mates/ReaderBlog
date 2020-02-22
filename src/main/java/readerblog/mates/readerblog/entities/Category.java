@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * @author @ivanleschinsky
  * @author mzheldin@yandex.ru
+ * @author @tetyaezhik
  */
 
 @Data
@@ -29,5 +30,4 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Book> books;
-
 }

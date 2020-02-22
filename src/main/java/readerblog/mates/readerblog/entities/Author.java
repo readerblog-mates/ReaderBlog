@@ -9,9 +9,12 @@ import java.util.List;
 
 /**
  * @author mzheldin@yandex.ru
+ * @author @tetyaezhik
  */
 
+
 @Entity
+@Table(name = "authors")
 @Data
 @NoArgsConstructor
 public class Author {
@@ -34,6 +37,7 @@ public class Author {
     private String shortBiography;
 
     @Column(name = "born_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date bornDate;
 
     @Column(name = "rating")

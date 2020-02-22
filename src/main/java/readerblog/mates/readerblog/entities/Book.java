@@ -3,18 +3,20 @@ package readerblog.mates.readerblog.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import javax.persistence.*;
 import java.util.List;
 
 /**
  * @author mzheldin@yandex.ru
+ * @author @tetyaezhik
  */
 
 @Entity
+@Table(name = "books")
 @Data
 @NoArgsConstructor
 public class Book {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
