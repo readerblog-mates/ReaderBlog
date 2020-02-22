@@ -1,11 +1,11 @@
-package com.geekbrains.Readerbook.controllers;
+package readerblog.mates.readerblog.controllers;
 
-import com.geekbrains.Readerbook.entities.Author;
-import com.geekbrains.Readerbook.services.AuthorAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import readerblog.mates.readerblog.entities.Author;
+import readerblog.mates.readerblog.services.AuthorAdminService;
 
 @Controller
 @RequestMapping("/authorsAdmin")
