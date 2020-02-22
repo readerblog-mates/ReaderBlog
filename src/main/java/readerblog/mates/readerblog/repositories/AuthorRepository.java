@@ -34,4 +34,8 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
     List<Author> findAllByBooks(List<Book> books);
 
     void removeById(Long id);
+
+    List<Author> findByLastNameStartingWith(Character firstLetter);
+
+    List<Author> findAllByOrderByLastName();
 }
