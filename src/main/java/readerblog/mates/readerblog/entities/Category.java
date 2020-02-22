@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,12 +8,15 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
+ * @author @ivanleschinsky
  * @author mzheldin@yandex.ru
  */
 
-@Entity
 @Data
+@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -25,4 +29,5 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Book> books;
+
 }
