@@ -148,6 +148,7 @@ public class AuthorServiceImpl implements AuthorService {
      * @param rating рейтинг
      * @return округленный рейтинг
      */
+    /*TODO Я бы вынес этот метод в пакет utils класс UtilMath или поискал стандартный округлитель*/
     private Double roundingRating(Double rating){
         if (rating != null)
             return BigDecimal.valueOf(rating).setScale(1, RoundingMode.HALF_UP).doubleValue();
@@ -166,6 +167,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     public void updateRating(Long id, Double rating){
+        //TODO на твое усмотрение
         //Проверка значения не помешает, хотя может именно здесь это будет излишне?
         if (rating > 5.0 || rating < 0.0) throw new IllegalArgumentException();
         Author author = findOneById(id);
