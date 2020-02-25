@@ -2,11 +2,13 @@ package readerblog.mates.readerblog.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Sergey Petukhov
@@ -17,17 +19,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "roles")
-public class Role implements Serializable {
-
-    private static final long serialVersionUID = -7483309127820484301L;
-
-    /* TODO почему поле называется role_id если в базе у нас id
-       TODO зачем нам здесь @OneToOne(optional = false, mappedBy = "role")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @OneToOne(optional = false, mappedBy = "role")
-    private Long role_id;
-     */
+@EqualsAndHashCode(exclude = "users")
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +30,9 @@ public class Role implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
 }

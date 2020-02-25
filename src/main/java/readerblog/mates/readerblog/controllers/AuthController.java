@@ -12,8 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import readerblog.mates.readerblog.entities.User;
+import readerblog.mates.readerblog.enums.AuthProvider;
 import readerblog.mates.readerblog.exception.BadRequestException;
-import readerblog.mates.readerblog.entities.AuthProvider;
 
 import readerblog.mates.readerblog.payload.AuthResponse;
 import readerblog.mates.readerblog.payload.LoginRequest;
@@ -69,7 +69,7 @@ public class AuthController {
         user.setNickName(signUpRequest.getNickName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.local);
+        user.setProvider(AuthProvider.LOCAL);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

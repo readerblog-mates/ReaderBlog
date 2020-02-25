@@ -1,6 +1,7 @@
 package readerblog.mates.readerblog.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Table(name = "authors")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"books", "rating", "shortBiography"})
 public class Author {
 
     @Id
@@ -34,11 +36,12 @@ public class Author {
     @Column(name = "patronymic_name")
     private String patronymicName;
 
+    @Lob
     @Column(name = "short_biography")
     private String shortBiography;
 
     @Column(name = "born_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date bornDate;
 
     @Column(name = "rating")
