@@ -97,19 +97,29 @@ CREATE TABLE books
     id              BIGSERIAL PRIMARY KEY,
     title           VARCHAR(255),
     genre_id        int,
-    category_id     int,
     pages           int,
     format          VARCHAR(255),
     year_of_writing int,
     origin_language VARCHAR(255),
     publisher       VARCHAR(255),
     rating          real,
-    FOREIGN KEY (genre_id) REFERENCES genres (id),
-    FOREIGN KEY (category_id) REFERENCES categories (id)
+    FOREIGN KEY (genre_id) REFERENCES genres (id)
 );
-INSERT INTO books (title, genre_id, category_id, pages, format, year_of_writing,
+INSERT INTO books (title, genre_id, pages, format, year_of_writing,
                    origin_language, publisher, rating)
-VALUES ('Robinson Crusoe', 1, 1, 120, 'story', 1820, 'English', 'Neva', 10.0);
+VALUES ('Robinson Crusoe', 1, 120, 'story', 1820, 'English', 'Neva', 10.0);
+
+DROP TABLE IF EXISTS categories_books;
+CREATE TABLE categories_books
+(
+    category_id     INT    NOT NULL,
+    book_id         BIGINT NOT NULL,
+    PRIMARY KEY (category_id, book_id),
+    FOREIGN KEY (category_id) REFERENCES categories (id),
+    FOREIGN KEY (book_id) REFERENCES books (id)
+);
+INSERT INTO categories_books(category_id, book_id)
+VALUES (1, 1);
 
 DROP TABLE IF EXISTS authors_books;
 CREATE TABLE authors_books
@@ -153,38 +163,16 @@ DROP TABLE IF EXISTS quotes;
 CREATE TABLE quotes
 (
     id     BIGSERIAL PRIMARY KEY,
+    book_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
     TEXT   TEXT,
     status varchar(50),
-    rating real
-);
-INSERT INTO quotes(TEXT, status, rating)
-values ('some quote', 'ACTIVE', 6.5);
-
-
-DROP TABLE IF EXISTS quotes_books;
-CREATE TABLE quotes_books
-(
-    quote_id BIGINT NOT NULL,
-    book_id   BIGINT NOT NULL,
-    PRIMARY KEY (quote_id, book_id),
-    FOREIGN KEY (quote_id) REFERENCES quotes (id),
-    FOREIGN KEY (book_id) REFERENCES books (id)
-);
-INSERT INTO quotes_books(quote_id, book_id)
-values (1, 1);
-
-
-DROP TABLE IF EXISTS quotes_users;
-CREATE TABLE quotes_users
-(
-    quotes_id BIGINT NOT NULL,
-    user_id   BIGINT NOT NULL,
-    PRIMARY KEY (quotes_id, user_id),
-    FOREIGN KEY (quotes_id) REFERENCES quotes (id),
+    rating real,
+    FOREIGN KEY (book_id) REFERENCES books (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-INSERT INTO quotes_users(quotes_id, user_id)
-values (1, 1);
+INSERT INTO quotes(book_id, user_id, TEXT, status, rating)
+values (1, 1, 'some quote', 'ACTIVE', 6.5);
 
 
 DROP TABLE IF EXISTS key_words;

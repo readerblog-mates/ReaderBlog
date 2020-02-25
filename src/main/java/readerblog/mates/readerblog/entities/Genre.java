@@ -2,6 +2,7 @@ package readerblog.mates.readerblog.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "genres")
+@EqualsAndHashCode(exclude = "books")
 public class Genre {
 
     @Id

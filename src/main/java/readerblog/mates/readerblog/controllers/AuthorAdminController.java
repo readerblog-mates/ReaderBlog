@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import readerblog.mates.readerblog.entities.Author;
-import readerblog.mates.readerblog.services.AuthorAdminService;
+import readerblog.mates.readerblog.services.Implementations.AuthorAdminService;
 
 @Controller
 @RequestMapping("/authorsAdmin")
