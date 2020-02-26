@@ -51,7 +51,9 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public Author findOneById(Long id) {
-        return authorRepository.findById(id).get();
+        if (id != null)
+            return authorRepository.findById(id).get();
+        return null;
     }
 
     @Override
@@ -63,7 +65,17 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public List<Author> findByRating(Double ratingMin, Double ratingMax) {
-        return authorRepository.findByRatingBetween(ratingMin, ratingMax);
+        if (ratingMin != null && ratingMax != null)
+            return authorRepository.findByRatingBetween(ratingMin, ratingMax);
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<Author> findByRating(Double rating) {
+        if (rating != null)
+            return authorRepository.findAllByRating(roundingRating(rating));
+        return null;
     }
 
     /**
@@ -93,37 +105,56 @@ public class AuthorServiceImpl implements AuthorService {
         return null;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByGenre(Long genreId) {
-//        return authorRepository.findAllByBooks(bookService.findByGenreId(genreId));
-//    }
+    @Override
+    @Transactional
+    public List<Author> findByGenre(Long genreId) {
+        if (genreId != null){
+            List<Book> books = bookService.findByGenre(genreId);
+            if (books != null && books.size() > 0)
+                return authorRepository.findAllByBooksIn(books);
+        }
+        return null;
+    }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByCategory(Long categoryId) {
-//        return authorRepository.findAllByBooks(bookService.findByCategoryId(categoryId));
-//    }
+    @Override
+    @Transactional
+    public List<Author> findByCategory(Long categoryId) {
+        if (categoryId != null){
+            List<Book> books = bookService.findByCategory(categoryId);
+            if (books != null && books.size() > 0)
+                return authorRepository.findAllByBooksIn(books);
+        }
+        return null;
+    }
 
-//    @Override
-//    public List<Long> findIdByGenre(Long genreId) {
-//        List<Long> authorsId = new ArrayList<>();
-//        findByGenre(genreId).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
+    @Override
+    public List<Long> findIdByGenre(Long genreId) {
+        List<Long> authorsId = new ArrayList<>();
+        findByGenre(genreId).forEach(author -> authorsId.add(author.getId()));
+        if (authorsId.size() > 0)
+            return authorsId;
+        return null;
+    }
 
-//    @Override
-//    public List<Long> findIdByCategory(Long categoryId) {
-//        List<Long> authorsId = new ArrayList<>();
-//        findByCategory(categoryId).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
+    @Override
+    public List<Long> findIdByCategory(Long categoryId) {
+        List<Long> authorsId = new ArrayList<>();
+        findByCategory(categoryId).forEach(author -> authorsId.add(author.getId()));
+        if (authorsId.size() > 0)
+            return authorsId;
+        return null;
+    }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByCategoryAndGenre(Long categoryId, Long genreId) {
-//        return authorRepository.findAllByBooks(bookService.findAllByCategoryIdAndGenreId(categoryId, genreId));
-//    }
+    @Override
+    @Transactional
+    public List<Author> findByCategoryAndGenre(Long categoryId, Long genreId) {
+        if (categoryId != null && genreId != null){
+            List<Book> books = bookService.findByCategoryAndGenre(categoryId, genreId);
+            if (books != null && books.size() > 0)
+                return authorRepository.findAllByBooksIn(books);
+        }
+        return null;
+    }
 
     @Override
     @Transactional
@@ -134,16 +165,29 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public void remove(Long authorId) {
-        authorRepository.removeById(authorId);
+        if (authorId != null && authorRepository.findById(authorId).isPresent())
+            authorRepository.removeById(authorId);
     }
 
-//    @Override
-//    @Transactional
-//    public List<Long> findByBook(Book book) {
-//        List<Long> authorsId = new ArrayList<>();
-//        authorRepository.findAllByBooks(Collections.singletonList(book)).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
+    @Override
+    @Transactional
+    public List<Long> findByBook(Book book) {
+        if (book != null){
+            List<Long> authorsId = new ArrayList<>();
+            authorRepository.findAllByBooksIn(Collections.singletonList(book)).forEach(author -> authorsId.add(author.getId()));
+            if (authorsId.size() > 0)
+                return authorsId;
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<Author> findAllById(List<Long> ids) {
+        if (ids != null && ids.size() > 0)
+            return authorRepository.findAllByIdIn(ids);
+        return null;
+    }
 
     /**
      * Округляет double до 1 знака после запятой.
@@ -158,22 +202,30 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Transactional
-    public List<Author> findByLastNameFirstLetter(Character firstLetter){
-        return authorRepository.findByLastNameStartingWith(firstLetter);
+    public List<Author> findByLastNameFirstLetter(String firstLetters){
+        if (firstLetters != null)
+            return authorRepository.findByLastNameStartingWith(firstLetters);
+        return null;
     }
 
+    @Override
     @Transactional
-    public List<Author> findAllOrderByLastName(){
+    public List<Author> findAllByOrderByLastName(){
         return authorRepository.findAllByOrderByLastName();
     }
 
+    @Override
     @Transactional
     public void updateRating(Long id, Double rating){
         //TODO на твое усмотрение
         //Проверка значения не помешает, хотя может именно здесь это будет излишне?
-        if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
-        Author author = findOneById(id);
-        author.setRating(rating);
-        save(author);
+        if (id != null && rating != null){
+            if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
+            Author author = findOneById(id);
+            if (author != null){
+                author.setRating(rating);
+                save(author);
+            }
+        }
     }
 }

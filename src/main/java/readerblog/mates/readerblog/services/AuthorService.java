@@ -20,13 +20,18 @@ public interface AuthorService {
     Author findOneById(Long id);
     List<Author> findAll();
     List<Author> findByRating(Double ratingMin, Double ratingMax);
+    List<Author> findByRating(Double rating);
     List<Author> findByName(String firstName, String lastName, String patronymicName);
-    //List<Author> findByGenre(Long genreId);
-    //List<Author> findByCategory(Long categoryId);
-    //List<Long> findIdByGenre(Long genreId);
-    //List<Long> findIdByCategory(Long categoryId);
-    //List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
+    List<Author> findByGenre(Long genreId);
+    List<Author> findByCategory(Long categoryId);
+    List<Long> findIdByGenre(Long genreId);
+    List<Long> findIdByCategory(Long categoryId);
+    List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
     Page<Author> findAllByPagingAndFiltering(Specification<Author> specification, Pageable pageable);
     void remove(Long authorId);
-    //List<Long> findByBook(Book book);
+    List<Long> findByBook(Book book);
+    List<Author> findAllById(List<Long> ids);
+    List<Author> findAllByOrderByLastName();
+    void updateRating(Long id, Double rating);
+    List<Author> findByLastNameFirstLetter(String firstLetters);
 }

@@ -31,11 +31,15 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 
     List<Author> findByPatronymicName(String patronymicName);
 
-    //List<Author> findAllByBooks(List<Book> books);
+    List<Author> findAllByBooksIn(List<Book> books);
 
     void removeById(Long id);
 
-    List<Author> findByLastNameStartingWith(Character firstLetter);
+    List<Author> findByLastNameStartingWith(String firstLetter);
 
     List<Author> findAllByOrderByLastName();
+
+    List<Author> findAllByIdIn(List<Long> ids);
+
+    List<Author> findAllByRating(Double rating);
 }
