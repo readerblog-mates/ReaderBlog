@@ -1,24 +1,38 @@
-package readerblog.mates.ReaderBlog.entities;
+package readerblog.mates.readerblog.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.List;
+
+/**
+ * @author @ivanleschinsky
+ * @author mzheldin@yandex.ru
+ * @author @tetyaezhik
+ */
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "categories")
+@EqualsAndHashCode(exclude = "books")
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    public Category(String name) {
-        this.name = name;
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "categories_books",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> books;
 }

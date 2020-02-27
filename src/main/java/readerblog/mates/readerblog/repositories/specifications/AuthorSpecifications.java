@@ -46,11 +46,11 @@ public class AuthorSpecifications {
                 BigDecimal.valueOf(rating).setScale(0, RoundingMode.HALF_UP).doubleValue());
     }
 
-    public Specification<Author> genreEquals(Long genreId){
-        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByGenre(genreId)));
-    }
-
-    public Specification<Author> categoryEquals(Long categoryId){
-        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByCategory(categoryId)));
-    }
+//    public Specification<Author> genreEquals(Long genreId){
+//        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByGenre(genreId)));
+//    }
+//
+//    public Specification<Author> categoryEquals(Long categoryId){
+//        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByCategory(categoryId)));
+//    }
 }

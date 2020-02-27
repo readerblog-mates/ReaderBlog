@@ -1,18 +1,35 @@
-package readerblog.mates.ReaderBlog.entities;
+package readerblog.mates.readerblog.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.List;
+
+/**
+ * @author @ivanleschinsky
+ * @author mzheldin@yandex.ru
+ */
 
 @Data
-@NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "genres")
+@EqualsAndHashCode(exclude = "books")
 public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
+    @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
+    private List<Book> books;
+
 }
