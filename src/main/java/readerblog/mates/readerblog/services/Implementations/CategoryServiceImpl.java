@@ -1,10 +1,11 @@
-package readerblog.mates.readerblog.services;
+package readerblog.mates.readerblog.services.Implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import readerblog.mates.readerblog.entities.Category;
 import readerblog.mates.readerblog.repositories.CategoryRepository;
+import readerblog.mates.readerblog.services.CategoryService;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
 

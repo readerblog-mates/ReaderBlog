@@ -3,11 +3,13 @@ package readerblog.mates.readerblog.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import readerblog.mates.readerblog.enums.AuthProvider;
+import readerblog.mates.readerblog.enums.StatusOfUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +39,7 @@ public class User {
 
     @Column(name = "nick_name", nullable = false)
     private String nickName;
+
     @Column(name = "password")
     private String password;
 
@@ -47,27 +50,23 @@ public class User {
     @Column(name = "email_verified")
     private Boolean emailVerified = false;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusOfUser status;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     private String imageUrl;
-
 
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
     private String providerId;
 
-    /* TODO автор точно уверен в этой конструкции? */
-    @OneToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "role", nullable = false)
-    private Role role;
-
-    /*TODO поля нет в БД так и должно быть?*/
-//    private StatusOfUser status;
 
     /**
      * @return - information about user by nick

@@ -1,4 +1,4 @@
-package readerblog.mates.readerblog.services;
+package readerblog.mates.readerblog.services.Implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
