@@ -61,4 +61,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Quote> quotes;
 }

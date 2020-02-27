@@ -67,6 +67,8 @@ public class User {
 
     private String providerId;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Quote> quotes;
 
     /**
      * @return - information about user by nick
