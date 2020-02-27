@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {
 
-    List<Author> findByRating(Double rating);
+    List<Author> findByRatingBetween(Double ratingMin, Double ratingMax);
 
     List<Author> findByFirstNameAndLastNameAndPatronymicName(String firstName, String lastName, String patronymicName);
 
@@ -31,7 +31,11 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 
     List<Author> findByPatronymicName(String patronymicName);
 
-    List<Author> findAllByBooks(List<Book> books);
+    //List<Author> findAllByBooks(List<Book> books);
 
     void removeById(Long id);
+
+    List<Author> findByLastNameStartingWith(Character firstLetter);
+
+    List<Author> findAllByOrderByLastName();
 }

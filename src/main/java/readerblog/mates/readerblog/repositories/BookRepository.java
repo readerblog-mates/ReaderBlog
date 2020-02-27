@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByGenreId(Long genreId);
-    List<Book> findAllByCategoryId(Long categoryId);
-    List<Book> findAllByCategoryIdAndGenreId(Long categoryId, Long genreId);
+    //List<Book> findAllByCategoryId(Long categoryId);
+    //List<Book> findAllByCategoryIdAndGenreId(Long categoryId, Long genreId);
 }
