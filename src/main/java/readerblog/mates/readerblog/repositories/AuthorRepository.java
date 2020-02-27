@@ -33,13 +33,13 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 
     List<Author> findAllByBooksIn(List<Book> books);
 
-    void removeById(Long id);
+    Author removeById(Long id);
 
-    List<Author> findByLastNameStartingWith(String firstLetter);
+    List<Author> findAllByLastNameStartingWith(String firstLetter);
 
     List<Author> findAllByOrderByLastName();
 
-    List<Author> findAllByIdIn(List<Long> ids);
+    List<Author> findAllByFirstNameStartingWith(String firstLetter);
 
-    List<Author> findAllByRating(Double rating);
+//    List<Author> findAllByIdIn(List<Long> ids);
 }

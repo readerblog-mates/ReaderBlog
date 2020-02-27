@@ -11,9 +11,8 @@ import readerblog.mates.readerblog.entities.Book;
 import readerblog.mates.readerblog.repositories.AuthorRepository;
 import readerblog.mates.readerblog.services.AuthorService;
 import readerblog.mates.readerblog.services.BookService;
+import readerblog.mates.readerblog.utils.Utilities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,8 +40,9 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public Author save(Author author) {
-        if (author != null){
-            author.setRating(roundingRating(author.getRating()));
+        if (author != null ){
+            if (author.getRating() != null)
+                author.setRating(Utilities.roundingRating(author.getRating()));
             return authorRepository.save(author);
         }
         return null;
@@ -50,7 +50,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public Author findOneById(Long id) {
+    public Author findOne(Long id) {
         if (id != null)
             return authorRepository.findById(id).get();
         return null;
@@ -66,15 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public List<Author> findByRating(Double ratingMin, Double ratingMax) {
         if (ratingMin != null && ratingMax != null)
-            return authorRepository.findByRatingBetween(ratingMin, ratingMax);
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public List<Author> findByRating(Double rating) {
-        if (rating != null)
-            return authorRepository.findAllByRating(roundingRating(rating));
+            return authorRepository.findByRatingBetween(Utilities.roundingRating(ratingMin), Utilities.roundingRating(ratingMax));
         return null;
     }
 
@@ -164,9 +156,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void remove(Long authorId) {
+    public Author remove(Long authorId) {
         if (authorId != null && authorRepository.findById(authorId).isPresent())
-            authorRepository.removeById(authorId);
+            return authorRepository.removeById(authorId);
+        return null;
     }
 
     @Override
@@ -183,30 +176,37 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public List<Author> findAllById(List<Long> ids) {
-        if (ids != null && ids.size() > 0)
-            return authorRepository.findAllByIdIn(ids);
-        return null;
-    }
-
-    /**
-     * Округляет double до 1 знака после запятой.
-     * @param rating рейтинг
-     * @return округленный рейтинг
-     */
-    /*TODO Я бы вынес этот метод в пакет utils класс UtilMath или поискал стандартный округлитель*/
-    private Double roundingRating(Double rating){
-        if (rating != null)
-            return BigDecimal.valueOf(rating).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        return null;
-    }
-
-    @Transactional
     public List<Author> findByLastNameFirstLetter(String firstLetters){
         if (firstLetters != null)
-            return authorRepository.findByLastNameStartingWith(firstLetters);
+            return authorRepository.findAllByLastNameStartingWith(firstLetters);
         return null;
     }
+
+    @Override
+    @Transactional
+    public List<Author> findByFirstNameFirstLetter(String firstLetters) {
+        if (firstLetters != null)
+            return authorRepository.findAllByFirstNameStartingWith(firstLetters);
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<Author> saveAll(List<Author> authors) {
+        if (authors != null && authors.size() > 0){
+            authors.forEach(author -> author.setRating(Utilities.roundingRating(author.getRating())));
+            return authorRepository.saveAll(authors);
+        }
+        return null;
+    }
+
+//    @Override
+//    @Transactional
+//    public List<Author> findAllById(List<Long> ids) {
+//        if (ids != null && ids.size() > 0)
+//            return authorRepository.findAllByIdIn(ids);
+//        return null;
+//    }
 
     @Override
     @Transactional
@@ -216,16 +216,15 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void updateRating(Long id, Double rating){
-        //TODO на твое усмотрение
-        //Проверка значения не помешает, хотя может именно здесь это будет излишне?
+    public Boolean updateRating(Long id, Double rating){
         if (id != null && rating != null){
             if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
-            Author author = findOneById(id);
+            Author author = findOne(id);
             if (author != null){
-                author.setRating(rating);
-                save(author);
+                author.setRating(Utilities.roundingRating(rating));
+                return save(author) != null;
             }
         }
+        return false;
     }
 }

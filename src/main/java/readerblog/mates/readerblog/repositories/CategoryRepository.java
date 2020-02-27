@@ -20,14 +20,14 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category findByName(String name);
 
-    void removeById(Long id);
+    Category removeById(Long id);
 
-    void removeByName(String name);
+    Category removeByName(String name);
 
     @Query(value = "UPDATE categories set name = :newName where name = :oldName", nativeQuery = true)
-    void update(String oldName, String newName);
+    Integer update(String oldName, String newName);
 
-    List<Category> findAllByBooksIn(List<Book> books);
+//    List<Category> findAllByBooksIn(List<Book> books);
 
-    List<Category> findAllByIdIn(List<Long> ids);
+//    List<Category> findAllByIdIn(List<Long> ids);
 }

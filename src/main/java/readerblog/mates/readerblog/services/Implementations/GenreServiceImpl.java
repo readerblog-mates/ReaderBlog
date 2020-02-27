@@ -19,17 +19,17 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
 
     private GenreRepository genreRepository;
-    private BookService bookService;
+//    private BookService bookService;
 
     @Autowired
     public void setGenreRepository(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }
 
-    @Autowired
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
-    }
+//    @Autowired
+//    public void setBookService(BookService bookService) {
+//        this.bookService = bookService;
+//    }
 
     @Override
     @Transactional
@@ -39,16 +39,18 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public void remove(Long id) {
+    public Genre remove(Long id) {
         if (id != null && genreRepository.findById(id).isPresent())
-            genreRepository.removeById(id);
+            return genreRepository.removeById(id);
+        return null;
     }
 
     @Override
     @Transactional
-    public void remove(String name) {
+    public Genre remove(String name) {
         if (name != null && genreRepository.findByName(name) != null)
-            genreRepository.removeByName(name);
+            return genreRepository.removeByName(name);
+        return null;
     }
 
     @Override
@@ -77,19 +79,20 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public void changeName(String oldName, String newName) {
+    public Boolean changeName(String oldName, String newName) {
         if (oldName != null && newName != null)
-            genreRepository.update(oldName, newName);
+            return genreRepository.update(oldName, newName) > 0;
+        return false;
     }
 
-    @Override
-    @Transactional
-    public List<Genre> findByBooks(List<Long> bookIds) {
-        if (bookIds != null && bookIds.size() > 0){
-            List<Book> books = bookService.findAllById(bookIds);
-            if (books != null && books.size() > 0)
-                genreRepository.findAllByBooksIn(books);
-        }
-        return null;
-    }
+//    @Override
+//    @Transactional
+//    public List<Genre> findByBooks(List<Long> bookIds) {
+//        if (bookIds != null && bookIds.size() > 0){
+//            List<Book> books = bookService.findAllById(bookIds);
+//            if (books != null && books.size() > 0)
+//                genreRepository.findAllByBooksIn(books);
+//        }
+//        return null;
+//    }
 }

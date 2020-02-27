@@ -16,10 +16,10 @@ public interface CategoryService {
     List<Category> findAll();
     Category findOne(Long id);
     Category findOne(String name);
-    void changeName(String oldName, String newName);
-    void remove(Long id);
-    void remove(String name);
+    Boolean changeName(String oldName, String newName);
+    Category remove(Long id);
+    Category remove(String name);
     Category save(Category category);
-    List<Category> findByBooks(List<Long> bookIds);
-    List<Category> findAllById(List<Long> ids);
+//    List<Category> findByBooks(List<Long> bookIds);
+//    List<Category> findAllById(List<Long> ids);
 }

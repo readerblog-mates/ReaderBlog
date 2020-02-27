@@ -20,12 +20,12 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     Genre findByName(String name);
 
-    void removeById(Long id);
+    Genre removeById(Long id);
 
-    void removeByName(String name);
+    Genre removeByName(String name);
 
     @Query(value = "UPDATE genres set name = :newName where name = :oldName", nativeQuery = true)
-    void update(String oldName, String newName);
+    Integer update(String oldName, String newName);
 
-    List<Genre> findAllByBooksIn(List<Book> books);
+//    List<Genre> findAllByBooksIn(List<Book> books);
 }

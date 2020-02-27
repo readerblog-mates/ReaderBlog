@@ -13,11 +13,11 @@ import java.util.List;
 @Service
 public interface GenreService {
     List<Genre> findAll();
-    void remove(Long id);
-    void remove(String name);
+    Genre remove(Long id);
+    Genre remove(String name);
     Genre findOne(String name);
     Genre findOne(Long id);
     Genre save(Genre genre);
-    void changeName(String oldName, String newName);
-    List<Genre> findByBooks(List<Long> bookIds);
+    Boolean changeName(String oldName, String newName);
+//    List<Genre> findByBooks(List<Long> bookIds);
 }

@@ -19,17 +19,17 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
-    private BookService bookService;
+//    private BookService bookService;
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-    @Autowired
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
-    }
+//    @Autowired
+//    public void setBookService(BookService bookService) {
+//        this.bookService = bookService;
+//    }
 
     @Override
     @Transactional
@@ -55,23 +55,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void changeName(String oldName, String newName) {
+    public Boolean changeName(String oldName, String newName) {
         if (oldName != null && newName != null)
-            categoryRepository.update(oldName, newName);
+            return categoryRepository.update(oldName, newName) > 0;
+        return false;
     }
 
     @Override
     @Transactional
-    public void remove(Long id) {
+    public Category remove(Long id) {
         if (id != null && categoryRepository.findById(id).isPresent())
-            categoryRepository.removeById(id);
+            return categoryRepository.removeById(id);
+        return null;
     }
 
     @Override
     @Transactional
-    public void remove(String name) {
+    public Category remove(String name) {
         if (name != null && categoryRepository.findByName(name) != null)
-            categoryRepository.removeByName(name);
+            return categoryRepository.removeByName(name);
+        return null;
     }
 
     @Override
@@ -82,22 +85,22 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
 
-    @Override
-    @Transactional
-    public List<Category> findByBooks(List<Long> bookIds) {
-        if (bookIds != null && bookIds.size() > 0){
-            List<Book> books = bookService.findAllById(bookIds);
-            if (books != null && books.size() > 0)
-                categoryRepository.findAllByBooksIn(books);
-        }
-        return null;
-    }
+//    @Override
+//    @Transactional
+//    public List<Category> findByBooks(List<Long> bookIds) {
+//        if (bookIds != null && bookIds.size() > 0){
+//            List<Book> books = bookService.findAllById(bookIds);
+//            if (books != null && books.size() > 0)
+//                categoryRepository.findAllByBooksIn(books);
+//        }
+//        return null;
+//    }
 
-    @Override
-    @Transactional
-    public List<Category> findAllById(List<Long> ids) {
-        if (ids != null && ids.size() > 0)
-            return categoryRepository.findAllByIdIn(ids);
-        return null;
-    }
+//    @Override
+//    @Transactional
+//    public List<Category> findAllById(List<Long> ids) {
+//        if (ids != null && ids.size() > 0)
+//            return categoryRepository.findAllByIdIn(ids);
+//        return null;
+//    }
 }

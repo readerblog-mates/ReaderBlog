@@ -17,10 +17,9 @@ import java.util.List;
 @Service
 public interface AuthorService {
     Author save(Author author);
-    Author findOneById(Long id);
+    Author findOne(Long id);
     List<Author> findAll();
     List<Author> findByRating(Double ratingMin, Double ratingMax);
-    List<Author> findByRating(Double rating);
     List<Author> findByName(String firstName, String lastName, String patronymicName);
     List<Author> findByGenre(Long genreId);
     List<Author> findByCategory(Long categoryId);
@@ -28,10 +27,12 @@ public interface AuthorService {
     List<Long> findIdByCategory(Long categoryId);
     List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
     Page<Author> findAllByPagingAndFiltering(Specification<Author> specification, Pageable pageable);
-    void remove(Long authorId);
+    Author remove(Long authorId);
     List<Long> findByBook(Book book);
-    List<Author> findAllById(List<Long> ids);
     List<Author> findAllByOrderByLastName();
-    void updateRating(Long id, Double rating);
+    Boolean updateRating(Long id, Double rating);
     List<Author> findByLastNameFirstLetter(String firstLetters);
+    List<Author> findByFirstNameFirstLetter(String firstLetters);
+    List<Author> saveAll(List<Author> authors);
+//    List<Author> findAllById(List<Long> ids);
 }
