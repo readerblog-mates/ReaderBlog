@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import readerblog.mates.readerblog.entities.Author;
-import readerblog.mates.readerblog.entities.Book;
 
 import java.util.List;
 
@@ -31,11 +30,11 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 
     List<Author> findByPatronymicName(String patronymicName);
 
-    //List<Author> findAllByBooks(List<Book> books);
+    Author removeById(Long id);
 
-    void removeById(Long id);
-
-    List<Author> findByLastNameStartingWith(Character firstLetter);
+    List<Author> findAllByLastNameStartingWith(String firstLetter);
 
     List<Author> findAllByOrderByLastName();
+
+    List<Author> findAllByFirstNameStartingWith(String firstLetter);
 }

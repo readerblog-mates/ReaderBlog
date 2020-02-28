@@ -17,16 +17,20 @@ import java.util.List;
 @Service
 public interface AuthorService {
     Author save(Author author);
-    Author findOneById(Long id);
+    Author findOne(Long id);
     List<Author> findAll();
     List<Author> findByRating(Double ratingMin, Double ratingMax);
     List<Author> findByName(String firstName, String lastName, String patronymicName);
-    //List<Author> findByGenre(Long genreId);
-    //List<Author> findByCategory(Long categoryId);
-    //List<Long> findIdByGenre(Long genreId);
-    //List<Long> findIdByCategory(Long categoryId);
-    //List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
+    List<Author> findByGenre(Long genreId);
+    List<Author> findByCategory(Long categoryId);
+    List<Long> findIdByGenre(Long genreId);
+    List<Long> findIdByCategory(Long categoryId);
+    List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
     Page<Author> findAllByPagingAndFiltering(Specification<Author> specification, Pageable pageable);
-    void remove(Long authorId);
-    //List<Long> findByBook(Book book);
+    Author remove(Long authorId);
+    List<Author> findAllByOrderByLastName();
+    Boolean updateRating(Long id, Double rating);
+    List<Author> findByLastNameFirstLetter(String firstLetters);
+    List<Author> findByFirstNameFirstLetter(String firstLetters);
+    List<Author> saveAll(List<Author> authors);
 }
