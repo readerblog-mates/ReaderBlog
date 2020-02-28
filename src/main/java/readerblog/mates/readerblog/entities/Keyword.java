@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "keywords")
+@Table(name = "key_words")
 @EqualsAndHashCode(exclude = "books")
 public class Keyword {
 	@Id
@@ -24,12 +24,12 @@ public class Keyword {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "keyword")
+	@Column(name = "word")
 	private String keyword;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "keywords_books",
-			joinColumns = @JoinColumn(name = "keyword_id"),
+	@JoinTable(name = "key_words_books",
+			joinColumns = @JoinColumn(name = "key_words_id"),
 			inverseJoinColumns = @JoinColumn(name = "book_id"))
 	private List<Book> books;
 }
