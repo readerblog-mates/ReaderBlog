@@ -6,13 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.entities.Book;
 import readerblog.mates.readerblog.entities.Category;
+import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.BookRepository;
 import readerblog.mates.readerblog.services.AuthorService;
 import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.CategoryService;
+import readerblog.mates.readerblog.services.GenreService;
 import readerblog.mates.readerblog.utils.Utilities;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,11 +26,12 @@ public class BookServiceImpl implements BookService {
 
     private BookRepository bookRepository;
     private CategoryService categoryService;
-//    private AuthorService authorService;
+    private GenreService genreService;
+    private AuthorService authorService;
 
     @Autowired
-    public void setBookRepository(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public void setAuthorService(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
     @Autowired
@@ -36,39 +39,42 @@ public class BookServiceImpl implements BookService {
         this.categoryService = categoryService;
     }
 
-//    @Autowired
-//    public void setAuthorService(AuthorService authorService) {
-//        this.authorService = authorService;
-//    }
+    @Autowired
+    public void setGenreService(GenreService genreService) {
+        this.genreService = genreService;
+    }
+
+    @Autowired
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @Override
-    @Transactional
     public List<Book> findByGenre(Long genreId) {
-        if (genreId != null)
-            return bookRepository.findAllByGenreId(genreId);
-        return null;
+        List<Book> books = new ArrayList<>();
+        Genre genre = genreService.findOne(genreId);
+        if (genre != null)
+            return genre.getBooks();
+        return books;
     }
 
     @Override
-    @Transactional
     public List<Book> findByCategory(Long categoryId) {
-        if (categoryId != null){
-            Category category = categoryService.findOne(categoryId);
-            if (category != null)
-                return bookRepository.findAllByCategoriesIn(Collections.singletonList(category));
-        }
-        return null;
+        List<Book> books = new ArrayList<>();
+        Category category = categoryService.findOne(categoryId);
+        if (category != null)
+            return category.getBooks();
+        return books;
     }
 
     @Override
-    @Transactional
     public List<Book> findByCategoryAndGenre(Long categoryId, Long genreId) {
-        if (categoryId != null && genreId != null){
-            Category category = categoryService.findOne(categoryId);
-            if (category != null)
-                return bookRepository.findAllByGenreIdAndCategoriesIn(genreId, Collections.singletonList(category));
-        }
-        return null;
+        List<Book> books = new ArrayList<>();
+        List<Book> booksByGenre = findByGenre(genreId);
+        for (Book book : findByCategory(categoryId))
+            if (booksByGenre.contains(book))
+                books.add(book);
+        return books;
     }
 
     @Override
@@ -99,89 +105,87 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public List<Book> saveAll(List<Book> books) {
+        List<Book> result = new ArrayList<>();
         if (books != null && books.size() > 0){
             books.forEach(book -> book.setRating(Utilities.roundingRating(book.getRating())));
             return bookRepository.saveAll(books);
         }
-        return null;
+        return result;
     }
 
     @Override
     @Transactional
     public List<Book> findByTitle(String title) {
+        List<Book> books = new ArrayList<>();
         if (title != null)
             return bookRepository.findAllByTitle(title);
-        return null;
+        return books;
     }
 
     @Override
     @Transactional
     public List<Book> findByPagesBetween(Integer firstPage, Integer lastPage) {
+        List<Book> books = new ArrayList<>();
         if (firstPage != null && lastPage != null)
             return bookRepository.findAllByPagesBetween(firstPage, lastPage);
-        return null;
+        return books;
     }
 
     @Override
     @Transactional
     public List<Book> findByFormat(List<String> formats) {
+        List<Book> books = new ArrayList<>();
         if (formats != null && formats.size() > 0)
             return bookRepository.findAllByFormatIn(formats);
-        return null;
+        return books;
     }
 
     @Override
     @Transactional
     public List<Book> findByYear(List<Integer> yearOfWritings) {
+        List<Book> books = new ArrayList<>();
         if (yearOfWritings != null && yearOfWritings.size() > 0)
             return bookRepository.findAllByYearOfWritingIn(yearOfWritings);
-        return null;
+        return books;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Book> findByAuthors(List<Long> authorIds) {
-//        if (authorIds != null && authorIds.size() > 0){
-//            List<Author> authors = authorService.findAllById(authorIds);
-//            if (authors != null && authors.size() > 0)
-//                return bookRepository.findAllByAuthorsIn(authors);
-//        }
-//        return null;
-//    }
+    @Override
+    public List<Book> findByAuthors(List<Long> authorIds) {
+        List<Book> books = new ArrayList<>();
+        if (authorIds != null && authorIds.size() > 0)
+            for (Long id : authorIds){
+                Author author = authorService.findOne(id);
+                if (author != null)
+                    books.addAll(author.getBooks());
+            }
+        return books;
+    }
 
     @Override
     @Transactional
     public List<Book> findByLanguage(List<String> originLanguages) {
+        List<Book> books = new ArrayList<>();
         if (originLanguages != null && originLanguages.size() > 0)
             return bookRepository.findAllByOriginLanguageIn(originLanguages);
-        return null;
+        return books;
     }
 
     @Override
     @Transactional
     public List<Book> findByPublisher(List<String> publishers) {
+        List<Book> books = new ArrayList<>();
         if (publishers != null && publishers.size() > 0)
             return bookRepository.findAllByPublisherIn(publishers);
-        return null;
+        return books;
     }
-
-//    @Override
-//    @Transactional
-//    public List<Book> findByCategories(List<Long> categoryIds) {
-//        if (categoryIds != null && categoryIds.size() > 0){
-//            List<Category> categories = categoryService.findAllById(categoryIds);
-//            if (categories != null && categories.size() > 0)
-//                return bookRepository.findAllByCategoriesIn(categories);
-//        }
-//        return null;
-//    }
 
     @Override
     @Transactional
     public List<Book> findByRating(Double ratingMin, Double ratingMax) {
+        List<Book> books = new ArrayList<>();
         if (ratingMin != null && ratingMax != null)
             return bookRepository.findAllByRatingBetween(Utilities.roundingRating(ratingMin), Utilities.roundingRating(ratingMax));
-        return null;
+        return books;
     }
 
     @Override
@@ -205,12 +209,4 @@ public class BookServiceImpl implements BookService {
             return bookRepository.findById(id).get();
         return null;
     }
-
-//    @Override
-//    @Transactional
-//    public List<Book> findAllById(List<Long> ids) {
-//        if (ids != null && ids.size() > 0)
-//            return bookRepository.findAllByIdIn(ids);
-//        return null;
-//    }
 }

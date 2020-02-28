@@ -3,10 +3,8 @@ package readerblog.mates.readerblog.services.Implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import readerblog.mates.readerblog.entities.Book;
 import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.GenreRepository;
-import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.GenreService;
 
 import java.util.List;
@@ -19,17 +17,11 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
 
     private GenreRepository genreRepository;
-//    private BookService bookService;
 
     @Autowired
     public void setGenreRepository(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }
-
-//    @Autowired
-//    public void setBookService(BookService bookService) {
-//        this.bookService = bookService;
-//    }
 
     @Override
     @Transactional
@@ -84,15 +76,4 @@ public class GenreServiceImpl implements GenreService {
             return genreRepository.update(oldName, newName) > 0;
         return false;
     }
-
-//    @Override
-//    @Transactional
-//    public List<Genre> findByBooks(List<Long> bookIds) {
-//        if (bookIds != null && bookIds.size() > 0){
-//            List<Book> books = bookService.findAllById(bookIds);
-//            if (books != null && books.size() > 0)
-//                genreRepository.findAllByBooksIn(books);
-//        }
-//        return null;
-//    }
 }

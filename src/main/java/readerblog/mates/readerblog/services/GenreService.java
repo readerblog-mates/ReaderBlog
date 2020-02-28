@@ -19,5 +19,4 @@ public interface GenreService {
     Genre findOne(Long id);
     Genre save(Genre genre);
     Boolean changeName(String oldName, String newName);
-//    List<Genre> findByBooks(List<Long> bookIds);
 }

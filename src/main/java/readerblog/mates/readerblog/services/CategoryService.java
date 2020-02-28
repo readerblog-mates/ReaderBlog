@@ -20,6 +20,4 @@ public interface CategoryService {
     Category remove(Long id);
     Category remove(String name);
     Category save(Category category);
-//    List<Category> findByBooks(List<Long> bookIds);
-//    List<Category> findAllById(List<Long> ids);
 }

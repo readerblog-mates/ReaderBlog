@@ -28,11 +28,9 @@ public interface AuthorService {
     List<Author> findByCategoryAndGenre(Long categoryId, Long genreId);
     Page<Author> findAllByPagingAndFiltering(Specification<Author> specification, Pageable pageable);
     Author remove(Long authorId);
-    List<Long> findByBook(Book book);
     List<Author> findAllByOrderByLastName();
     Boolean updateRating(Long id, Double rating);
     List<Author> findByLastNameFirstLetter(String firstLetters);
     List<Author> findByFirstNameFirstLetter(String firstLetters);
     List<Author> saveAll(List<Author> authors);
-//    List<Author> findAllById(List<Long> ids);
 }

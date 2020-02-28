@@ -4,10 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import readerblog.mates.readerblog.entities.Book;
 import readerblog.mates.readerblog.entities.Category;
-
-import java.util.List;
 
 /**
  * @author @ivanleschinsky
@@ -26,8 +23,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query(value = "UPDATE categories set name = :newName where name = :oldName", nativeQuery = true)
     Integer update(String oldName, String newName);
-
-//    List<Category> findAllByBooksIn(List<Book> books);
-
-//    List<Category> findAllByIdIn(List<Long> ids);
 }
