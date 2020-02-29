@@ -32,48 +32,38 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category findOne(Long id) {
-        if (id != null)
-            return categoryRepository.findById(id).get();
-        return null;
+        return (id != null && categoryRepository.findById(id).isPresent()) ?
+                categoryRepository.findById(id).get() : null;
     }
 
     @Override
     @Transactional
     public Category findOne(String name) {
-        if (name != null)
-            return categoryRepository.findByName(name);
-        return null;
+        return name != null ? categoryRepository.findByName(name) : null;
     }
 
     @Override
     @Transactional
     public Boolean changeName(String oldName, String newName) {
-        if (oldName != null && newName != null)
-            return categoryRepository.update(oldName, newName) > 0;
-        return false;
+        return (oldName != null && newName != null) && categoryRepository.update(oldName, newName) > 0;
     }
 
     @Override
     @Transactional
     public Category remove(Long id) {
-        if (id != null && categoryRepository.findById(id).isPresent())
-            return categoryRepository.removeById(id);
-        return null;
+        return (id != null && categoryRepository.findById(id).isPresent()) ? categoryRepository.removeById(id) :null;
     }
 
     @Override
     @Transactional
     public Category remove(String name) {
-        if (name != null && categoryRepository.findByName(name) != null)
-            return categoryRepository.removeByName(name);
-        return null;
+        return (name != null && categoryRepository.findByName(name) != null) ?
+                categoryRepository.removeByName(name) : null;
     }
 
     @Override
     @Transactional
     public Category save(Category category) {
-        if (category != null)
-            categoryRepository.save(category);
-        return null;
+        return category != null ? categoryRepository.save(category) : null;
     }
 }
