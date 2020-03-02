@@ -48,11 +48,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
+        Optional<User> userOptional;
         if(StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
-            throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
+            userOptional = userRepository.findByProviderId(oAuth2UserInfo.getId());
+        } else {
+            userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         }
-
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
@@ -71,11 +72,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
-
+        user.setProviderId(oAuth2UserInfo.getId());
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
-        user.setFirstName(oAuth2UserInfo.getName());
-        user.setNickName(oAuth2UserInfo.getName());
+        if(user.getProvider().toString().equalsIgnoreCase("github")){
+            user.setFirstName(oAuth2UserInfo.attributes.get("login").toString());
+
+            user.setNickName(oAuth2UserInfo.attributes.get("login").toString());
+        }else if (user.getProvider().toString().equalsIgnoreCase("facebook")) {
+
+            user.setFirstName(oAuth2UserInfo.getName());
+            user.setNickName(oAuth2UserInfo.getName());
+        }
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
         Role role = roleService.findById(1);

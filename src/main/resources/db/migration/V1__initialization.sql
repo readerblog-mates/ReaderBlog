@@ -53,6 +53,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
     id         BIGSERIAL PRIMARY KEY,
+    provider_id VARCHAR(50),
     first_name VARCHAR(50),
     last_name  VARCHAR(50),
     nick_name  VARCHAR(50) UNIQUE,
@@ -60,7 +61,7 @@ CREATE TABLE users
     email      VARCHAR(50) UNIQUE,
     email_verified BOOLEAN
 );
-INSERT INTO users (first_name, last_name, nick_name, password, email)
+INSERT INTO users ( first_name, last_name, nick_name, password, email)
 VALUES ('Admin', 'Admin', 'admin', '100', 'admin@gmail.com');
 
 
