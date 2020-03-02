@@ -1,9 +1,13 @@
 package readerblog.mates.readerblog.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -32,12 +36,11 @@ public class User {
     @Column(name = "email_verified")
     private Boolean emailVerified = false;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
+    @ManyToMany( fetch = FetchType.EAGER, cascade ={CascadeType.MERGE, CascadeType.DETACH})
+    @JoinTable(  name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
-
+    private Collection<Role> roles = new HashSet<>();
     private String imageUrl;
 
 
@@ -132,5 +135,9 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void addRole(Role role) {
+        getRoles().add(role);
     }
 }

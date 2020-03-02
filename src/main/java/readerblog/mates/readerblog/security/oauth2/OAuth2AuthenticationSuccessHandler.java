@@ -2,12 +2,14 @@ package readerblog.mates.readerblog.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import readerblog.mates.readerblog.config.AppProperties;
 import readerblog.mates.readerblog.exception.BadRequestException;
 import readerblog.mates.readerblog.security.TokenProvider;
+import readerblog.mates.readerblog.security.UserPrincipal;
 import readerblog.mates.readerblog.util.CookieUtils;
 
 import javax.servlet.ServletException;

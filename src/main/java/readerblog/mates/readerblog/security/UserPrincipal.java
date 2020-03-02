@@ -4,37 +4,45 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import readerblog.mates.readerblog.model.Role;
 import readerblog.mates.readerblog.model.User;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
     private Long id;
     private String email;
+    private String nickName;
+
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String nickName, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
     public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new UserPrincipal(
                 user.getId(),
+                user.getNickName(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                mapRolesToAuthorities(user.getRoles())
         );
+    }
+
+    private static Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
     public static UserPrincipal create(User user, Map<String, Object> attributes) {
@@ -58,7 +66,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return nickName;
     }
 
     @Override

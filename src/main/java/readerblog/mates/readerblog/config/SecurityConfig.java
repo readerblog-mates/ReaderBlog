@@ -67,7 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder
                 .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
+
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -130,7 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(oAuth2AuthenticationFailureHandler)
                         .and()
                         .logout()
-                        .logoutSuccessUrl("/readerblog")
+                        .logoutSuccessUrl("/")
                         .permitAll();
 
 

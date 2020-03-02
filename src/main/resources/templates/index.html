@@ -29,9 +29,17 @@
 
     </div>
     <div class="panel panel-info">
-        Authenticated username:
-    <div sec:authentication="name"></div>
-        Authenticated user roles:
+        <div sec:authentication property="principal.username"></div>
+
+        <div sec:authorize="isAuthenticated()">
+            Authenticated as <span sec:authentication="name"></span>
+            <div sec:authentication property="principal.username"></div>
+            <div sec:authentication property="principal.credentials"></div>
+            <span sec:authentication="principal.authorities"></span>
+
+        </div>
+
+
 
     </div>
     <div class="row">

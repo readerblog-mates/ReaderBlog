@@ -1,8 +1,12 @@
 package readerblog.mates.readerblog.security.oauth2.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -11,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import readerblog.mates.readerblog.exception.OAuth2AuthenticationProcessingException;
 import readerblog.mates.readerblog.model.AuthProvider;
+import readerblog.mates.readerblog.model.Role;
 import readerblog.mates.readerblog.model.User;
 import readerblog.mates.readerblog.repository.UserRepository;
 import readerblog.mates.readerblog.security.UserPrincipal;
 import readerblog.mates.readerblog.security.oauth2.OAuth2UserInfoFactory;
+import readerblog.mates.readerblog.services.RoleService;
 
 import java.util.Optional;
 
@@ -23,6 +29,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -67,8 +75,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
         user.setFirstName(oAuth2UserInfo.getName());
+        user.setNickName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        Role role = roleService.findById(1);
+        user.addRole(role);
         return userRepository.save(user);
     }
 
