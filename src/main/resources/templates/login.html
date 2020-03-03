@@ -45,23 +45,27 @@
                         <input type="password" name="password" placeholder="password" class="form-control">
                     </div>
                     <div style="margin-top: 10px" class="form-group">
-                        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
                         <div class="col-sm-6 controls">
                             <button type="submit" class="btn btn-success">Login</button>
                         </div>
-                        <div>
-                            With FaceBook: <a th:href="@{/oauth2/authorize/facebook}">click here</a>
-                        </div>
+
+
                     </div>
+
                 </form>
             </div>
         </div>
-
-        <div class="panel panel-info">
-
+        <div style="margin-top: 10px" class="input-group">
+            <div>
+                With FaceBook: <a th:href="@{/oauth2/authorize/facebook}">click here</a>
+            </div>
             <div>
                 With GIT: <a th:href="@{/oauth2/authorize/github}">click here</a>
             </div>
+
+        </div>
+        <div class="panel panel-info">
+
 
         </div>
     </div>

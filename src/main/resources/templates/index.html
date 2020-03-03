@@ -24,11 +24,12 @@
     <h2>release-rb-N1</h2>
     <div class="panel panel-info">
 
-        <span th:text="Привет + ${msg}" th:unless="${msg == null}"></span>
+        <span th:text="Привет + ${ msg}" th:unless="${msg == null}"></span>
 
 
     </div>
     <div class="panel panel-info">
+
         <div sec:authentication property="principal.username"></div>
 
         <div sec:authorize="isAuthenticated()">
@@ -39,7 +40,10 @@
 
         </div>
 
-
+        _______________________________________________
+        <div th:text="${#authentication.name}" ></div>
+        ______________________________________________
+        <div th:text="${#session.getAttribute('user')}" th:unless="${#session == null}"></div>
 
     </div>
     <div class="row">
@@ -47,7 +51,7 @@
 
     </div>
     <div class="row">
-        <a  th:href="@{/login}"><h3>SignIn</h3></a>
+        <a  th:href="@{/signin}"><h3>SignIn</h3></a>
     </div>
     <div sec:authorize="isAuthenticated()">
         <a th:href="@{/logout}" class="nav-link text-left">Logout</a>
