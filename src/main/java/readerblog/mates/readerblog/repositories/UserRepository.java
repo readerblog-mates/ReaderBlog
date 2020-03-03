@@ -21,15 +21,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     // методы save и deleteById есть в CrudRepository по умолчанию
 
-    void deleteByEmail(String email);
+    User deleteByEmail(String email);
 
     boolean existsByEmail(String email);
 
     User findByEmail(String email);
 
-    List<User> findByRoles(List<Role> roles);
-
-    User findByFirstNameAndLastName(String firstName, String lastName);
+    List<User> findByFirstNameAndLastName(String firstName, String lastName);
 
     User findByNickName(String nickName);
 
