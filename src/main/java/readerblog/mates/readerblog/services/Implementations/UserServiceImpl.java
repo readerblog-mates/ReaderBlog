@@ -12,6 +12,8 @@ import readerblog.mates.readerblog.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * @author Sergey Petukhov
  */
@@ -21,19 +23,25 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository repository;
 
-    @Autowired
-    public void setRepository(UserRepository repository) {
+    public UserServiceImpl(@Autowired UserRepository repository){
         this.repository = repository;
     }
 
     @Override
-    public void deleteByEmail(String email) {
-        repository.deleteByEmail(email);
+    public User deleteByEmail(String email) {
+        if (email == null)
+            return null;
+        else return repository.deleteByEmail(email);
     }
 
     @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public User deleteById(Long id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isPresent()){
+            repository.deleteById(id);
+            return user.get();
+        }
+        return null;
     }
 
     @Override
@@ -43,18 +51,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        return repository.save(user);
+        if (user == null)
+            return null;
+        else return repository.save(user);
     }
 
     @Override
     public User findOneById(Long id) {
         return repository.getOne(id);
-    }
-
-    // find all users who have the roles we need
-    @Override
-    public List<User> findByRoles(List<Role> roles) {
-        return repository.findByRoles(roles);
     }
 
     @Override
@@ -63,23 +67,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByFirstNameAndLastName(String firstName, String lastName) {
-        return repository.findByFirstNameAndLastName(firstName, lastName);
+    public List<User> findByFirstNameAndLastName(String firstName, String lastName) {
+        if (firstName == null || lastName == null)
+            return null;
+        else return repository.findByFirstNameAndLastName(firstName, lastName);
     }
 
     @Override
     public User findByNickName(String nickName) {
-        return repository.findByNickName(nickName);
+        if (nickName == null)
+            return null;
+        else return repository.findByNickName(nickName);
     }
 
     @Override
     public List<User> findByStatus(StatusOfUser status) {
-        return repository.findByStatus(status);
+        if (status == null)
+            return null;
+        else return repository.findByStatus(status);
     }
 
     @Override
     public User findAllByEmail(String email) {
-        return repository.findByEmail(email);
+        if (email == null)
+            return null;
+        else return repository.findByEmail(email);
     }
 
 }
