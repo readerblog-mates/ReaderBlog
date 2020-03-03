@@ -47,11 +47,19 @@ public class AuthorFilter {
             specification = specification.and(authorSpecifications.categoryEquals(Long.valueOf(request.getParameter("cat_id"))));
             filtersString.append("&cat_id=" + request.getParameter("cat_id"));
         }
-        //todo rating between
-        if (request.getParameter("rating_id") != null && !request.getParameter("rating_id").isEmpty()){
-            specification = specification.and(authorSpecifications.ratingEquals(Double.valueOf(request.getParameter("rating_id"))));
-            filtersString.append("&rating_id=" + request.getParameter("rating_id"));
+
+        if ((request.getParameter("minRating") != null && !request.getParameter("minRating").isEmpty()) ||
+                (request.getParameter("maxRating") != null && !request.getParameter("maxRating").isEmpty())){
+            specification = specification.and(authorSpecifications.ratingEquals(
+                    (request.getParameter("minRating") != null && !request.getParameter("minRating").isEmpty()) ?
+                            Double.valueOf(request.getParameter("minRating")) : null,
+                    (request.getParameter("maxRating") != null && !request.getParameter("maxRating").isEmpty()) ?
+                            Double.valueOf(request.getParameter("maxRating")) : null));
+            filtersString.append("&minRating=").append(request.getParameter("minRating"))
+                    .append("&maxRating=").append(request.getParameter("maxRating"));
         }
+
+
 
         if (request.getParameter("first_name") != null && !request.getParameter("first_name").isEmpty()){
             specification = specification.and(authorSpecifications.firstNameEquals(request.getParameter("first_name")));

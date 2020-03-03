@@ -19,4 +19,20 @@ public class Utilities {
             return BigDecimal.valueOf(rating).setScale(1, RoundingMode.HALF_UP).doubleValue();
         return null;
     }
+
+    /**
+     * Проверка выхода значения Double за границы 0.0 - 10.0, так же округляет.
+     * @param rating
+     * @return
+     */
+    public static Double checkRatingLimits(Double rating){
+        if (rating != null){
+            if (rating > 10.0)
+                return 10.0;
+            if (rating < 0.0)
+                return 0.0;
+            return roundingRating(rating);
+        }
+        return null;
+    }
 }
