@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface UserService {
 
-    void deleteByEmail(String email);
+    User deleteByEmail(String email);
 
-    void deleteById(Long id);
+    User deleteById(Long id);
 
     boolean existsByEmail(String email);
 
@@ -26,11 +26,9 @@ public interface UserService {
 
     User findOneById(Long id);
 
-    List<User> findByRoles(List<Role> roles);
-
     List<User> findAll();
 
-    User findByFirstNameAndLastName(String firstName, String lastName);
+    List<User> findByFirstNameAndLastName(String firstName, String lastName);
 
     User findAllByEmail(String email);
 
