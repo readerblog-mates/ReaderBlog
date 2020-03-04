@@ -8,15 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.entities.Book;
+import readerblog.mates.readerblog.entities.Category;
+import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.AuthorRepository;
 import readerblog.mates.readerblog.services.AuthorService;
 import readerblog.mates.readerblog.services.BookService;
+import readerblog.mates.readerblog.services.CategoryService;
+import readerblog.mates.readerblog.services.GenreService;
+import readerblog.mates.readerblog.utils.Utilities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author mzheldin@yandex.ru
@@ -26,7 +30,8 @@ import java.util.List;
 public class AuthorServiceImpl implements AuthorService {
 
     private AuthorRepository authorRepository;
-    private BookService bookService;
+    private GenreService genreService;
+    private CategoryService categoryService;
 
     @Autowired
     public void setAuthorRepository(AuthorRepository authorRepository) {
@@ -34,15 +39,21 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Autowired
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
+    public void setGenreService(GenreService genreService) {
+        this.genreService = genreService;
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @Override
     @Transactional
     public Author save(Author author) {
-        if (author != null){
-            author.setRating(roundingRating(author.getRating()));
+        if (author != null ){
+            if (author.getRating() != null)
+                author.setRating(Utilities.roundingRating(author.getRating()));
             return authorRepository.save(author);
         }
         return null;
@@ -50,8 +61,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public Author findOneById(Long id) {
-        return authorRepository.findById(id).get();
+    public Author findOne(Long id) {
+        return (id != null && authorRepository.findById(id).isPresent()) ? authorRepository.findById(id).get() : null;
     }
 
     @Override
@@ -63,7 +74,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public List<Author> findByRating(Double ratingMin, Double ratingMax) {
-        return authorRepository.findByRatingBetween(ratingMin, ratingMax);
+        return authorRepository.findAllByRatingBetween(ratingMin == null ? 0.0 : Utilities.checkRatingLimits(ratingMin),
+                ratingMax == null ? 10.0 : Utilities.checkRatingLimits(ratingMax));
     }
 
     /**
@@ -76,6 +88,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public List<Author> findByName(String firstName, String lastName, String patronymicName) {
+        List<Author> authors = new ArrayList<>();
         if (firstName != null && lastName != null && patronymicName != null)
             return authorRepository.findByFirstNameAndLastNameAndPatronymicName(firstName, lastName, patronymicName);
         if (firstName != null && lastName != null)
@@ -90,40 +103,56 @@ public class AuthorServiceImpl implements AuthorService {
             return authorRepository.findByLastName(lastName);
         if (patronymicName != null)
             return authorRepository.findByPatronymicName(patronymicName);
-        return null;
+        return authors;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByGenre(Long genreId) {
-//        return authorRepository.findAllByBooks(bookService.findByGenreId(genreId));
-//    }
+    @Override
+    public List<Author> findByGenre(Long genreId) {
+        Set<Author> authorSet = new HashSet<>();
+        Genre genre = genreService.findOne(genreId);
+        if (genre != null){
+            List<Book> books = genre.getBooks();
+            for (Book book : books)
+                authorSet.addAll(book.getAuthors());
+        }
+        return new ArrayList<>(authorSet);
+    }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByCategory(Long categoryId) {
-//        return authorRepository.findAllByBooks(bookService.findByCategoryId(categoryId));
-//    }
+    @Override
+    public List<Author> findByCategory(Long categoryId) {
+        Set<Author> authorSet = new HashSet<>();
+        Category category = categoryService.findOne(categoryId);
+        if (category != null){
+            List<Book> books = category.getBooks();
+            for (Book book : books)
+                authorSet.addAll(book.getAuthors());
+        }
+        return new ArrayList<>(authorSet);
+    }
 
-//    @Override
-//    public List<Long> findIdByGenre(Long genreId) {
-//        List<Long> authorsId = new ArrayList<>();
-//        findByGenre(genreId).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
+    @Override
+    public List<Long> findIdByGenre(Long genreId) {
+        List<Long> ids = new ArrayList<>();
+        findByGenre(genreId).forEach(author -> ids.add(author.getId()));
+        return ids;
+    }
 
-//    @Override
-//    public List<Long> findIdByCategory(Long categoryId) {
-//        List<Long> authorsId = new ArrayList<>();
-//        findByCategory(categoryId).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
+    @Override
+    public List<Long> findIdByCategory(Long categoryId) {
+        List<Long> ids = new ArrayList<>();
+        findByCategory(categoryId).forEach(author -> ids.add(author.getId()));
+        return ids;
+    }
 
-//    @Override
-//    @Transactional
-//    public List<Author> findByCategoryAndGenre(Long categoryId, Long genreId) {
-//        return authorRepository.findAllByBooks(bookService.findAllByCategoryIdAndGenreId(categoryId, genreId));
-//    }
+    @Override
+    public List<Author> findByCategoryAndGenre(Long categoryId, Long genreId) {
+        List<Author> authors = new ArrayList<>();
+        List<Author> authorsByGenre = findByGenre(genreId);
+        for (Author author : findByCategory(categoryId))
+            if (authorsByGenre.contains(author))
+                authors.add(author);
+        return authors;
+    }
 
     @Override
     @Transactional
@@ -133,47 +162,55 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void remove(Long authorId) {
-        authorRepository.removeById(authorId);
+    public Author remove(Long authorId) {
+        return (authorId != null && authorRepository.findById(authorId).isPresent()) ?
+                authorRepository.removeById(authorId) : null;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Long> findByBook(Book book) {
-//        List<Long> authorsId = new ArrayList<>();
-//        authorRepository.findAllByBooks(Collections.singletonList(book)).forEach(author -> authorsId.add(author.getId()));
-//        return authorsId;
-//    }
-
-    /**
-     * Округляет double до 1 знака после запятой.
-     * @param rating рейтинг
-     * @return округленный рейтинг
-     */
-    /*TODO Я бы вынес этот метод в пакет utils класс UtilMath или поискал стандартный округлитель*/
-    private Double roundingRating(Double rating){
-        if (rating != null)
-            return BigDecimal.valueOf(rating).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        return null;
-    }
-
+    @Override
     @Transactional
-    public List<Author> findByLastNameFirstLetter(Character firstLetter){
-        return authorRepository.findByLastNameStartingWith(firstLetter);
+    public List<Author> findByLastNameFirstLetter(String firstLetters){
+        return firstLetters != null ? authorRepository.findAllByLastNameStartingWith(firstLetters) : new ArrayList<>();
     }
 
+    @Override
     @Transactional
-    public List<Author> findAllOrderByLastName(){
+    public List<Author> findByFirstNameFirstLetter(String firstLetters) {
+        return firstLetters != null ? authorRepository.findAllByFirstNameStartingWith(firstLetters) : new ArrayList<>();
+    }
+
+    @Override
+    @Transactional
+    public List<Author> saveAll(List<Author> authors) {
+        List<Author> result = new ArrayList<>();
+        if (authors != null && authors.size() > 0){
+            authors.forEach(author -> author.setRating(Utilities.roundingRating(author.getRating())));
+            return authorRepository.saveAll(authors);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public List<Author> findAllByOrderByLastName(){
         return authorRepository.findAllByOrderByLastName();
     }
 
+    @Override
     @Transactional
-    public void updateRating(Long id, Double rating){
-        //TODO на твое усмотрение
-        //Проверка значения не помешает, хотя может именно здесь это будет излишне?
-        if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
-        Author author = findOneById(id);
-        author.setRating(rating);
-        save(author);
+    public List<Author> findAllByOrderByFirstName() {
+        return  authorRepository.findAllByOrderByFirstName();
+    }
+
+    @Override
+    public Boolean updateRating(Long id, Double rating){
+        if (id != null && rating != null){
+            Author author = findOne(id);
+            if (author != null){
+                author.setRating(Utilities.checkRatingLimits(rating));
+                return save(author) != null;
+            }
+        }
+        return false;
     }
 }

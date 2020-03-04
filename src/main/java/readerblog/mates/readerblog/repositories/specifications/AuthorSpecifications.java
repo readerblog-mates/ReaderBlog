@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.services.AuthorService;
+import readerblog.mates.readerblog.utils.Utilities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,18 +40,20 @@ public class AuthorSpecifications {
         return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("patronymicName"), patronymicName);
     }
-    //todo может не работать с граничными значениями
-    public Specification<Author> ratingEquals(Double rating){
+
+    public Specification<Author> ratingEquals(Double minRating, Double maxRating){
         return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.between(root.get("rating"),
-                BigDecimal.valueOf(rating).setScale(0, RoundingMode.HALF_DOWN).doubleValue(),
-                BigDecimal.valueOf(rating).setScale(0, RoundingMode.HALF_UP).doubleValue());
+                minRating == null ? 0.0 : Utilities.checkRatingLimits(minRating),
+                maxRating == null ? 10.0 : Utilities.checkRatingLimits(maxRating));
     }
 
-//    public Specification<Author> genreEquals(Long genreId){
-//        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByGenre(genreId)));
-//    }
-//
-//    public Specification<Author> categoryEquals(Long categoryId){
-//        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByCategory(categoryId)));
-//    }
+    public Specification<Author> genreEquals(Long genreId){
+        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByGenre(genreId)));
+    }
+
+    public Specification<Author> categoryEquals(Long categoryId){
+        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByCategory(categoryId)));
+    }
 }

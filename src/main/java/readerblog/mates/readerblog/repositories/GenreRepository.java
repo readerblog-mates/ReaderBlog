@@ -17,11 +17,10 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     Genre findByName(String name);
 
-    void removeById(Integer id);
+    Genre removeById(Long id);
 
-    void removeByName(String name);
+    Genre removeByName(String name);
 
     @Query(value = "UPDATE genres set name = :newName where name = :oldName", nativeQuery = true)
-    void update(String oldName, String newName);
-
+    Integer update(String oldName, String newName);
 }
