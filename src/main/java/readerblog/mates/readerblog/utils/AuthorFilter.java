@@ -38,20 +38,28 @@ public class AuthorFilter {
         filtersString = new StringBuilder();
         specification = Specification.where(null);
 
-//        if (request.getParameter("genre_id") != null && !request.getParameter("genre_id").isEmpty()){
-//            specification = specification.and(authorSpecifications.genreEquals(Long.valueOf(request.getParameter("genre_id"))));
-//            filtersString.append("&genre_id=" + request.getParameter("genre_id"));
-//        }
-
-//        if (request.getParameter("cat_id") != null && !request.getParameter("cat_id").isEmpty()){
-//            specification = specification.and(authorSpecifications.categoryEquals(Long.valueOf(request.getParameter("cat_id"))));
-//            filtersString.append("&cat_id=" + request.getParameter("cat_id"));
-//        }
-        //todo rating between
-        if (request.getParameter("rating_id") != null && !request.getParameter("rating_id").isEmpty()){
-            specification = specification.and(authorSpecifications.ratingEquals(Double.valueOf(request.getParameter("rating_id"))));
-            filtersString.append("&rating_id=" + request.getParameter("rating_id"));
+        if (request.getParameter("genre_id") != null && !request.getParameter("genre_id").isEmpty()){
+            specification = specification.and(authorSpecifications.genreEquals(Long.valueOf(request.getParameter("genre_id"))));
+            filtersString.append("&genre_id=" + request.getParameter("genre_id"));
         }
+
+        if (request.getParameter("cat_id") != null && !request.getParameter("cat_id").isEmpty()){
+            specification = specification.and(authorSpecifications.categoryEquals(Long.valueOf(request.getParameter("cat_id"))));
+            filtersString.append("&cat_id=" + request.getParameter("cat_id"));
+        }
+
+        if ((request.getParameter("minRating") != null && !request.getParameter("minRating").isEmpty()) ||
+                (request.getParameter("maxRating") != null && !request.getParameter("maxRating").isEmpty())){
+            specification = specification.and(authorSpecifications.ratingEquals(
+                    (request.getParameter("minRating") != null && !request.getParameter("minRating").isEmpty()) ?
+                            Double.valueOf(request.getParameter("minRating")) : null,
+                    (request.getParameter("maxRating") != null && !request.getParameter("maxRating").isEmpty()) ?
+                            Double.valueOf(request.getParameter("maxRating")) : null));
+            filtersString.append("&minRating=").append(request.getParameter("minRating"))
+                    .append("&maxRating=").append(request.getParameter("maxRating"));
+        }
+
+
 
         if (request.getParameter("first_name") != null && !request.getParameter("first_name").isEmpty()){
             specification = specification.and(authorSpecifications.firstNameEquals(request.getParameter("first_name")));

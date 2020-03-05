@@ -87,7 +87,7 @@ public class AuthorController {
      */
     @GetMapping("/{id}")
     public String author(@RequestParam(value = "id") Long id, Model model){
-        model.addAttribute("author", authorService.findOneById(id));
+        model.addAttribute("author", authorService.findOne(id));
         return "author";
     }
 
@@ -101,7 +101,7 @@ public class AuthorController {
     public String showAuthorEditForm(Model model, @RequestParam(name = "id", required = false) Long id){
         Author author;
         if (id != null)
-            author = authorService.findOneById(id);
+            author = authorService.findOne(id);
         else
             author = new Author();
         model.addAttribute("author", author);

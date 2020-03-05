@@ -17,10 +17,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category findByName(String name);
 
-    void removeById(Integer id);
+    Category removeById(Long id);
 
-    void removeByName(String name);
+    Category removeByName(String name);
 
     @Query(value = "UPDATE categories set name = :newName where name = :oldName", nativeQuery = true)
-    void update(String oldName, String newName);
+    Integer update(String oldName, String newName);
 }
