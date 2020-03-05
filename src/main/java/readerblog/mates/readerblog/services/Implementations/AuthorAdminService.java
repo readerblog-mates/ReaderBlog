@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.services.Implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import readerblog.mates.readerblog.entities.Author;
@@ -8,13 +9,9 @@ import readerblog.mates.readerblog.repositories.AuthorAdminRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthorAdminService {
-    private AuthorAdminRepository authorAdminRepository;
-
-    @Autowired
-    public void setAuthorAdminRepository(AuthorAdminRepository authorAdminRepository) {
-        this.authorAdminRepository = authorAdminRepository;
-    }
+    private  final AuthorAdminRepository authorAdminRepository;
 
     public List<Author> getAllAuthors() {
         return (List<Author>) authorAdminRepository.findAll();
@@ -31,6 +28,4 @@ public class AuthorAdminService {
     public Author save(Author author) {
         return authorAdminRepository.save(author);
     }
-
-
 }

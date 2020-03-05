@@ -1,16 +1,13 @@
-package readerblog.mates.readerblog.services;
+package readerblog.mates.readerblog.services.Implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import readerblog.mates.readerblog.entities.Role;
 import readerblog.mates.readerblog.entities.User;
 import readerblog.mates.readerblog.enums.StatusOfUser;
 import readerblog.mates.readerblog.repositories.UserRepository;
+import readerblog.mates.readerblog.services.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +16,10 @@ import java.util.Optional;
  */
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
-    private UserRepository repository;
-
-    public UserServiceImpl(@Autowired UserRepository repository){
-        this.repository = repository;
-    }
+    private final UserRepository repository;
 
     @Override
     public User deleteByEmail(String email) {

@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.services.Implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,6 @@ import readerblog.mates.readerblog.entities.Category;
 import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.AuthorRepository;
 import readerblog.mates.readerblog.services.AuthorService;
-import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.CategoryService;
 import readerblog.mates.readerblog.services.GenreService;
 import readerblog.mates.readerblog.utils.Utilities;
@@ -27,26 +27,12 @@ import java.util.Set;
  */
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthorServiceImpl implements AuthorService {
 
-    private AuthorRepository authorRepository;
-    private GenreService genreService;
-    private CategoryService categoryService;
-
-    @Autowired
-    public void setAuthorRepository(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
-
-    @Autowired
-    public void setGenreService(GenreService genreService) {
-        this.genreService = genreService;
-    }
-
-    @Autowired
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    private final AuthorRepository authorRepository;
+    private final GenreService genreService;
+    private final CategoryService categoryService;
 
     @Override
     @Transactional
@@ -80,10 +66,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     /**
      * Общий метод для поиска Автора по имени, фамилии и/или отчеству. Возможно, не нужен при наличии спецификаций.
-     * @param firstName
-     * @param lastName
-     * @param patronymicName
-     * @return
+     * @param firstName имя Автора
+     * @param lastName фамилия Автора
+     * @param patronymicName отчество Автора
+     * @return список Авторов
      */
     @Override
     @Transactional

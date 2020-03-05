@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE roles
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(32) NOT NULL
+    name VARCHAR(32) NOT NULL UNIQUE
 );
 INSERT INTO roles (name)
 VALUES ('ROLE_USER'),
@@ -179,7 +179,7 @@ DROP TABLE IF EXISTS key_words;
 CREATE TABLE key_words
 (
     id   BIGSERIAL PRIMARY KEY,
-    word VARCHAR(255)
+    word VARCHAR(255) NOT NULL
 );
 INSERT INTO key_words(word)
 values ('child'),
