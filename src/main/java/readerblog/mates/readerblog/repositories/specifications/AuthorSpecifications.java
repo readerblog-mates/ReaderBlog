@@ -56,4 +56,9 @@ public class AuthorSpecifications {
         return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.isTrue(root.get("id").in(authorService.findIdByCategory(categoryId)));
     }
+
+    public Specification<Author> firstLetterEquals(String firstLetter){
+        return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.like(root.get("lastName"), firstLetter.charAt(0) + "%");
+    }
 }

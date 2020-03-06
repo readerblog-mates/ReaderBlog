@@ -59,7 +59,10 @@ public class AuthorFilter {
                     .append("&maxRating=").append(request.getParameter("maxRating"));
         }
 
-
+        if (request.getParameter("first_letter") != null && !request.getParameter("first_letter").isEmpty()){
+            specification = specification.and(authorSpecifications.firstLetterEquals(request.getParameter("first_letter")));
+            filtersString.append("&first_letter=" + request.getParameter("first_letter"));
+        }
 
         if (request.getParameter("first_name") != null && !request.getParameter("first_name").isEmpty()){
             specification = specification.and(authorSpecifications.firstNameEquals(request.getParameter("first_name")));
