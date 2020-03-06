@@ -3,6 +3,7 @@ package readerblog.mates.readerblog.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Author {
     private String patronymicName;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "short_biography")
     private String shortBiography;
 
