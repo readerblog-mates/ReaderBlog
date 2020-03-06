@@ -60,11 +60,12 @@ public class AuthorController {
         if (pageNumber == null || pageNumber < 1)
             pageNumber = 1;
         authorFilter.takeRequest(request);
-        Page<Author> page = authorService.findAllByPagingAndFiltering(authorFilter.getSpecification(), PageRequest.of(0, 10, Sort.Direction.ASC, "id"));
+        Page<Author> page = authorService.findAllByPagingAndFiltering(authorFilter.getSpecification(), PageRequest.of(pageNumber - 1, 10, Sort.Direction.ASC, "id"));
         model.addAttribute("page", page);
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("filters", authorFilter.getFiltersString());
+        model.addAttribute("letters", authorService.getLetters());
         model.addAttribute("pageNumber", pageNumber);
         return "authors";
     }
@@ -74,9 +75,10 @@ public class AuthorController {
      * @param id
      * @return
      */
+//    @ResponseBody
 //    @GetMapping("/{id}")
-//    public Author author(@RequestParam(value = "id") Long id){
-//        return authorService.findOneById(id);
+//    public Author author(@PathVariable(value = "id") Long id){
+//        return authorService.findOne(id);
 //    }
 
     /**
@@ -86,13 +88,13 @@ public class AuthorController {
      * @return
      */
     @GetMapping("/{id}")
-    public String author(@RequestParam(value = "id") Long id, Model model){
+    public String author(@PathVariable(value = "id") Long id, Model model){
         model.addAttribute("author", authorService.findOne(id));
         return "author";
     }
 
     /**
-     * Редактирование Автора, направляет на форму редактирования автора, еслидля этого предполагается отдельная страница.
+     * Редактирование Автора, направляет на форму редактирования автора, если для этого предполагается отдельная страница.
      * @param model
      * @param id
      * @return
@@ -118,4 +120,18 @@ public class AuthorController {
         Author savedAuthor = authorService.save(author);
         return "redirect:/authors/" + savedAuthor.getId();
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteAuthor(Model model, @PathVariable(name = "id") Long id){
+        Author author = authorService.remove(id);
+        System.out.println(author.getId());
+        return "redirect:/authors/";
+    }
+
+    //Подобрать автора, сначала нужно придумать алгоритм
+//    @GetMapping("/authors/choose")
+//    public String choose(){
+//        // выборка данных
+//        return "authors";
+//    }
 }
