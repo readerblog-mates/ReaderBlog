@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <body>
+        <div th:fragment="footer">
+            <footer class="text-center">
+                <p> Copyright &copy; readerblog.mates, <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"/> | <span th:text="#{footer.copy}"/> </p>
+            </footer>
+        </div>
+    </body>
+</html>

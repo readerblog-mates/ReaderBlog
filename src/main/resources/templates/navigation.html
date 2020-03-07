@@ -26,6 +26,9 @@
                 <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'choose' ? ' active' : ''}">
                     <a class="nav-link" th:href="@{/choose}" th:text="#{nav.choose}"></a>
                 </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'profile' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/profile}" th:text="#{nav.profile}"></a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="POST">
                         <input type="submit" class="btn btn-outline-light" th:value="#{nav.logout}"/>
