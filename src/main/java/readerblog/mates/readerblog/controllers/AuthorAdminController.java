@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,14 +9,10 @@ import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.services.implementations.AuthorAdminService;
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/authorsAdmin")
 public class AuthorAdminController {
-    private AuthorAdminService authorAdminService;
-
-    @Autowired
-    public void setAuthorAdminService(AuthorAdminService authorAdminService) {
-        this.authorAdminService = authorAdminService;
-    }
+    private final AuthorAdminService authorAdminService;
 
     @GetMapping("/")
     public String showAllProducts(Model model) {
@@ -31,14 +28,11 @@ public class AuthorAdminController {
         return "redirect:/authorsAdmin/";
     }
 
-
-
     @GetMapping("/delete/{id}")
     public String deleteProductById(@PathVariable(name = "id") Long id) {
        authorAdminService.deleteById(id);
         return "redirect:/authorsAdmin/";
-            }
-
+    }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, @PathVariable(name = "id") Long id) {
@@ -52,7 +46,4 @@ public class AuthorAdminController {
         authorAdminService.save(author);
         return "redirect:/authorsAdmin/";
     }
-
-
-
 }

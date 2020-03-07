@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.repositories.specifications;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -8,23 +9,16 @@ import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.services.AuthorService;
 import readerblog.mates.readerblog.utils.Utilities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * @author mzheldin@yandex.ru
  */
 
 @Component
 @SessionScope
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthorSpecifications {
 
-    private AuthorService authorService;
-
-    @Autowired
-    public void setAuthorService(AuthorService authorService) {
-        this.authorService = authorService;
-    }
+    private final AuthorService authorService;
 
     public Specification<Author> firstNameEquals(String firstName){
         return (Specification<Author>) (root, criteriaQuery, criteriaBuilder) ->

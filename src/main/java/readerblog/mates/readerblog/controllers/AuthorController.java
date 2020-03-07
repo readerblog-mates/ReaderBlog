@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,33 +21,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/authors")
 public class AuthorController {
 
-    private AuthorService authorService;
-    private AuthorFilter authorFilter;
-    private GenreService genreService;
-    private CategoryService categoryService;
-
-    @Autowired
-    public void setAuthorService(AuthorService authorService) {
-        this.authorService = authorService;
-    }
-
-    @Autowired
-    public void setAuthorFilter(AuthorFilter authorFilter) {
-        this.authorFilter = authorFilter;
-    }
-
-    @Autowired
-    public void setGenreService(GenreService genreService) {
-        this.genreService = genreService;
-    }
-
-    @Autowired
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    private final AuthorService authorService;
+    private final AuthorFilter authorFilter;
+    private final GenreService genreService;
+    private final CategoryService categoryService;
 
     /**
      * Основная страница Авторов, результаты поиска по жанру/категории/ФИО/рейтингу направляют на нее же.

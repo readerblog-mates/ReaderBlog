@@ -1,9 +1,6 @@
 package readerblog.mates.readerblog.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,6 +23,7 @@ public class Genre {
     @Column(name = "id")
     private Long id;
 
+    @NonNull
     @Column(name = "name")
     private String name;
 

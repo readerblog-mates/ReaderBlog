@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.utils;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -16,16 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @SessionScope
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookFilter {
 
     private Specification<Book> specification;
     private StringBuilder filtersString;
-    private BookSpecifications bookSpecifications;
-
-    @Autowired
-    public void setAuthorSpecifications(BookSpecifications bookSpecifications) {
-        this.bookSpecifications = bookSpecifications;
-    }
+    private final BookSpecifications bookSpecifications;
 
     public Specification<Book> getSpecification() {
         return specification;

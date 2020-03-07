@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.repositories.specifications;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -15,13 +16,9 @@ import readerblog.mates.readerblog.utils.Utilities;
 
 @Component
 @SessionScope
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookSpecifications {
-    private BookService bookService;
-
-    @Autowired
-    public void setAuthorService(BookService bookService) {
-        this.bookService = bookService;
-    }
+    private final BookService bookService;
 
     public Specification<Book> authorEquals(String author){
         return (Specification<Book>) (root, criteriaQuery, criteriaBuilder) ->

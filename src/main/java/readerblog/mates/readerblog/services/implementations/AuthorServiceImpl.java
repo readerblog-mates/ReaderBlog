@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.services.implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,26 +27,12 @@ import java.util.Set;
  */
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthorServiceImpl implements AuthorService {
 
-    private AuthorRepository authorRepository;
-    private GenreService genreService;
-    private CategoryService categoryService;
-
-    @Autowired
-    public void setAuthorRepository(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
-
-    @Autowired
-    public void setGenreService(GenreService genreService) {
-        this.genreService = genreService;
-    }
-
-    @Autowired
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    private final AuthorRepository authorRepository;
+    private final GenreService genreService;
+    private final CategoryService categoryService;
 
     @Override
     @Transactional

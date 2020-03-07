@@ -1,9 +1,6 @@
 package readerblog.mates.readerblog.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -27,6 +24,7 @@ public class Role{
     @Column(name = "id")
     private Long id;
 
+    @NonNull
     @Column(name = "name")
     private String name;
 

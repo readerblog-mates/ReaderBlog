@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import readerblog.mates.readerblog.entities.Book;
-import readerblog.mates.readerblog.services.AuthorService;
 import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.CategoryService;
 import readerblog.mates.readerblog.services.GenreService;
@@ -24,27 +24,13 @@ import java.util.List;
  */
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/book")
 public class BookController {
-    private BookService bookService;
-    private BookFilter bookFilter;
-    private GenreService genreService;
-    private CategoryService categoryService;
-
-    @Autowired
-    public void setBookService(BookService bookService) { this.bookService = bookService; }
-    @Autowired
-    public void setBookFilter(BookFilter bookFilter) {
-        this.bookFilter = bookFilter;
-    }
-    @Autowired
-    public void setGenreService(GenreService genreService) {
-        this.genreService = genreService;
-    }
-    @Autowired
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    private final BookService bookService;
+    private final BookFilter bookFilter;
+    private final GenreService genreService;
+    private final CategoryService categoryService;
 
     @GetMapping("/books")
     public String showBook(Model model, @RequestParam Long id ){
@@ -52,6 +38,7 @@ public class BookController {
         model.addAttribute("book",book);
         return "books";
     }
+
     @GetMapping("/books/search") //поиск с параметрами запроса , либо в теле POST - запроса передаем данные
     public String search(
                          @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
@@ -73,6 +60,4 @@ public class BookController {
         model.addAttribute("pageNumber", pageNumber);
         return "books";
     }
-
-
 }
