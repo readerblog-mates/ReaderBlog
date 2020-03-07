@@ -1,4 +1,4 @@
-package readerblog.mates.readerblog.services.Implementations;
+package readerblog.mates.readerblog.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,6 @@ import readerblog.mates.readerblog.entities.Category;
 import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.AuthorRepository;
 import readerblog.mates.readerblog.services.AuthorService;
-import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.CategoryService;
 import readerblog.mates.readerblog.services.GenreService;
 import readerblog.mates.readerblog.utils.Utilities;
