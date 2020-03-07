@@ -6,21 +6,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Sergey Petukhov
+ * @author @ivanleschinsky
+ * @author mzheldin@yandex.ru
+ * @author @tetyaezhik
  */
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "roles")
-@EqualsAndHashCode(exclude = "users")
-public class Role{
+@Table(name = "categories")
+@EqualsAndHashCode(exclude = "books")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class Role{
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    @JoinTable(name = "categories_books",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> books;
 }
