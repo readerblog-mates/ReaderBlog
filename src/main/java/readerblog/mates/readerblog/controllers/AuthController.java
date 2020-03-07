@@ -40,7 +40,6 @@ public class AuthController {
     private TokenProvider tokenProvider;
 
     @PostMapping("/login")
-    @ResponseBody
     public String authenticateUser(@Valid LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -51,11 +50,11 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token = tokenProvider.createToken(authentication);
         ResponseEntity.ok(new AuthResponse(token));
-        return "/";
+        return "index";
     }
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String registerUser(@Valid SignUpRequest signUpRequest, Model model ) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
