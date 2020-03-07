@@ -8,6 +8,7 @@ import readerblog.mates.readerblog.enums.StatusOfUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,9 @@ import java.util.Map;
         name = "users",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"nick_name", "email"})}
 )
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 695787153791934593L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -81,6 +84,5 @@ public class User {
         return info;
     }
 
-// методы изменения статуса, изменения роли, никнейма и пароля
-
 }
+

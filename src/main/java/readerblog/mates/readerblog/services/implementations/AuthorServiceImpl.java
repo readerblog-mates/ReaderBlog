@@ -1,4 +1,4 @@
-package readerblog.mates.readerblog.services.Implementations;
+package readerblog.mates.readerblog.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,6 @@ import readerblog.mates.readerblog.entities.Category;
 import readerblog.mates.readerblog.entities.Genre;
 import readerblog.mates.readerblog.repositories.AuthorRepository;
 import readerblog.mates.readerblog.services.AuthorService;
-import readerblog.mates.readerblog.services.BookService;
 import readerblog.mates.readerblog.services.CategoryService;
 import readerblog.mates.readerblog.services.GenreService;
 import readerblog.mates.readerblog.utils.Utilities;
@@ -30,7 +29,6 @@ import java.util.Set;
 public class AuthorServiceImpl implements AuthorService {
 
     private AuthorRepository authorRepository;
-    private BookService bookService;
     private GenreService genreService;
     private CategoryService categoryService;
 
@@ -40,8 +38,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Autowired
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
+    public void setGenreService(GenreService genreService) {
+        this.genreService = genreService;
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -58,9 +61,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public Author findOne(Long id) {
-        if (id != null)
-            return authorRepository.findById(id).get();
-        return null;
+        return (id != null && authorRepository.findById(id).isPresent()) ? authorRepository.findById(id).get() : null;
     }
 
     @Override
@@ -72,10 +73,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public List<Author> findByRating(Double ratingMin, Double ratingMax) {
-        List<Author> authors = new ArrayList<>();
-        if (ratingMin != null && ratingMax != null)
-            return authorRepository.findByRatingBetween(Utilities.roundingRating(ratingMin), Utilities.roundingRating(ratingMax));
-        return authors;
+        return authorRepository.findAllByRatingBetween(ratingMin == null ? 0.0 : Utilities.checkRatingLimits(ratingMin),
+                ratingMax == null ? 10.0 : Utilities.checkRatingLimits(ratingMax));
     }
 
     /**
@@ -163,27 +162,20 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public Author remove(Long authorId) {
-        if (authorId != null && authorRepository.findById(authorId).isPresent())
-            return authorRepository.removeById(authorId);
-        return null;
+        return (authorId != null && authorRepository.findById(authorId).isPresent()) ?
+                authorRepository.removeById(authorId) : null;
     }
 
     @Override
     @Transactional
     public List<Author> findByLastNameFirstLetter(String firstLetters){
-        List<Author> authors = new ArrayList<>();
-        if (firstLetters != null)
-            return authorRepository.findAllByLastNameStartingWith(firstLetters);
-        return authors;
+        return firstLetters != null ? authorRepository.findAllByLastNameStartingWith(firstLetters) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Author> findByFirstNameFirstLetter(String firstLetters) {
-        List<Author> authors = new ArrayList<>();
-        if (firstLetters != null)
-            return authorRepository.findAllByFirstNameStartingWith(firstLetters);
-        return authors;
+        return firstLetters != null ? authorRepository.findAllByFirstNameStartingWith(firstLetters) : new ArrayList<>();
     }
 
     @Override
@@ -205,12 +197,16 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
+    public List<Author> findAllByOrderByFirstName() {
+        return  authorRepository.findAllByOrderByFirstName();
+    }
+
+    @Override
     public Boolean updateRating(Long id, Double rating){
         if (id != null && rating != null){
-            if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
             Author author = findOne(id);
             if (author != null){
-                author.setRating(Utilities.roundingRating(rating));
+                author.setRating(Utilities.checkRatingLimits(rating));
                 return save(author) != null;
             }
         }

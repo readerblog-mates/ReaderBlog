@@ -1,6 +1,9 @@
-package readerblog.mates.readerblog.services.Implementations;
+package readerblog.mates.readerblog.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import readerblog.mates.readerblog.entities.Author;
@@ -51,20 +54,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findByGenre(Long genreId) {
-        List<Book> books = new ArrayList<>();
         Genre genre = genreService.findOne(genreId);
-        if (genre != null)
-            return genre.getBooks();
-        return books;
+        return genre != null ? genre.getBooks() : new ArrayList<>();
     }
 
     @Override
     public List<Book> findByCategory(Long categoryId) {
-        List<Book> books = new ArrayList<>();
         Category category = categoryService.findOne(categoryId);
-        if (category != null)
-            return category.getBooks();
-        return books;
+        return category != null ? category.getBooks() : new ArrayList<>();
     }
 
     @Override
@@ -86,9 +83,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book remove(Long id) {
-        if (id != null && bookRepository.findById(id).isPresent())
-            return bookRepository.removeById(id);
-        return null;
+        return (id != null && bookRepository.findById(id).isPresent()) ? bookRepository.removeById(id) : null;
     }
 
     @Override
@@ -107,7 +102,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> saveAll(List<Book> books) {
         List<Book> result = new ArrayList<>();
         if (books != null && books.size() > 0){
-            books.forEach(book -> book.setRating(Utilities.roundingRating(book.getRating())));
+            books.forEach(book -> book.setRating(Utilities.checkRatingLimits(book.getRating())));
             return bookRepository.saveAll(books);
         }
         return result;
@@ -116,37 +111,27 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public List<Book> findByTitle(String title) {
-        List<Book> books = new ArrayList<>();
-        if (title != null)
-            return bookRepository.findAllByTitle(title);
-        return books;
+        return title != null ? bookRepository.findAllByTitle(title) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Book> findByPagesBetween(Integer firstPage, Integer lastPage) {
-        List<Book> books = new ArrayList<>();
-        if (firstPage != null && lastPage != null)
-            return bookRepository.findAllByPagesBetween(firstPage, lastPage);
-        return books;
+        return (firstPage != null && lastPage != null) ?
+                bookRepository.findAllByPagesBetween(firstPage, lastPage) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Book> findByFormat(List<String> formats) {
-        List<Book> books = new ArrayList<>();
-        if (formats != null && formats.size() > 0)
-            return bookRepository.findAllByFormatIn(formats);
-        return books;
+        return (formats != null && formats.size() > 0) ? bookRepository.findAllByFormatIn(formats) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Book> findByYear(List<Integer> yearOfWritings) {
-        List<Book> books = new ArrayList<>();
-        if (yearOfWritings != null && yearOfWritings.size() > 0)
-            return bookRepository.findAllByYearOfWritingIn(yearOfWritings);
-        return books;
+        return (yearOfWritings != null && yearOfWritings.size() > 0) ?
+                bookRepository.findAllByYearOfWritingIn(yearOfWritings) : new ArrayList<>();
     }
 
     @Override
@@ -164,38 +149,30 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public List<Book> findByLanguage(List<String> originLanguages) {
-        List<Book> books = new ArrayList<>();
-        if (originLanguages != null && originLanguages.size() > 0)
-            return bookRepository.findAllByOriginLanguageIn(originLanguages);
-        return books;
+        return (originLanguages != null && originLanguages.size() > 0) ?
+                bookRepository.findAllByOriginLanguageIn(originLanguages) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Book> findByPublisher(List<String> publishers) {
-        List<Book> books = new ArrayList<>();
-        if (publishers != null && publishers.size() > 0)
-            return bookRepository.findAllByPublisherIn(publishers);
-        return books;
+        return (publishers != null && publishers.size() > 0) ?
+                bookRepository.findAllByPublisherIn(publishers) : new ArrayList<>();
     }
 
     @Override
     @Transactional
     public List<Book> findByRating(Double ratingMin, Double ratingMax) {
-        List<Book> books = new ArrayList<>();
-        if (ratingMin != null && ratingMax != null)
-            return bookRepository.findAllByRatingBetween(Utilities.roundingRating(ratingMin), Utilities.roundingRating(ratingMax));
-        return books;
+        return bookRepository.findAllByRatingBetween(ratingMin == null ? 0.0 : Utilities.checkRatingLimits(ratingMin),
+                ratingMax == null ? 10.0 : Utilities.checkRatingLimits(ratingMax));
     }
 
     @Override
-    @Transactional
     public Boolean updateRating(Long id, Double rating){
         if (id != null && rating != null){
-            if (rating > 10.0 || rating < 0.0) throw new IllegalArgumentException();
             Book book = findOne(id);
             if (book != null){
-                book.setRating(Utilities.roundingRating(rating));
+                book.setRating(Utilities.checkRatingLimits(rating));
                 return save(book) != null;
             }
         }
@@ -205,8 +182,12 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book findOne(Long id) {
-        if (id != null && bookRepository.findById(id).isPresent())
-            return bookRepository.findById(id).get();
-        return null;
+        return (id != null && bookRepository.findById(id).isPresent()) ? bookRepository.findById(id).get() : null;
+    }
+
+    @Override
+    @Transactional
+    public Page<Book> findAllByPagingAndFiltering(Specification<Book> specification, Pageable pageable) {
+        return bookRepository.findAll(specification, pageable);
     }
 }

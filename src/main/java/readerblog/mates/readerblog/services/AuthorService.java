@@ -29,6 +29,7 @@ public interface AuthorService {
     Page<Author> findAllByPagingAndFiltering(Specification<Author> specification, Pageable pageable);
     Author remove(Long authorId);
     List<Author> findAllByOrderByLastName();
+    List<Author> findAllByOrderByFirstName();
     Boolean updateRating(Long id, Double rating);
     List<Author> findByLastNameFirstLetter(String firstLetters);
     List<Author> findByFirstNameFirstLetter(String firstLetters);

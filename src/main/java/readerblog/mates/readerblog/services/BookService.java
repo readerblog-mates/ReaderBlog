@@ -1,5 +1,8 @@
 package readerblog.mates.readerblog.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import readerblog.mates.readerblog.entities.Author;
 import readerblog.mates.readerblog.entities.Book;
@@ -29,4 +32,5 @@ public interface BookService {
     List<Book> findByRating(Double ratingMin, Double ratingMax);
     Boolean updateRating(Long id, Double rating);
     Book findOne(Long id);
+    Page<Book> findAllByPagingAndFiltering(Specification<Book> specification, Pageable pageable);
 }
