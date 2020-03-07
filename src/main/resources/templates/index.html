@@ -18,14 +18,13 @@
 <body>
 
 <div class="container">
-
+    <div th:replace="~{navigation :: navigation(myblog)}" />
     <br>
     <h1>Reader Blog</h1>
     <h2>release-rb-N1</h2>
     <div class="panel panel-info">
 
         <span th:text="Привет + ${msg}" th:unless="${msg == null}"></span>
-
 
     </div>
     <div class="panel panel-info">
