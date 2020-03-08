@@ -163,7 +163,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public Author remove(Long authorId) {
         return (authorId != null && authorRepository.findById(authorId).isPresent()) ?
-                authorRepository.removeById(authorId) : null;
+                authorRepository.removeById(authorId).get(0) : null;
     }
 
     @Override
@@ -187,6 +187,15 @@ public class AuthorServiceImpl implements AuthorService {
             return authorRepository.saveAll(authors);
         }
         return result;
+    }
+
+    @Override
+    public List<Character> getLetters() {
+        List<Character> letters = new ArrayList<>();
+        for (byte i = 65; i < 91; i++) {
+            letters.add((char) i);
+        }
+        return letters;
     }
 
     @Override

@@ -34,4 +34,6 @@ public interface AuthorService {
     List<Author> findByLastNameFirstLetter(String firstLetters);
     List<Author> findByFirstNameFirstLetter(String firstLetters);
     List<Author> saveAll(List<Author> authors);
+
+    List<Character> getLetters();
 }

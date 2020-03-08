@@ -22,7 +22,13 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
     List<Author> findByFirstName(String firstName);
     List<Author> findByLastName(String lastName);
     List<Author> findByPatronymicName(String patronymicName);
-    Author removeById(Long id);
+
+    // Изменил возвращаемый тип с Author на List<Author>, т.к. иначе вылезала ошибка
+    // java.lang.Integer cannot be cast to readerblog.mates.readerblog.entities.Author
+    // Видимо метод возвращает либо число(кол-во удаленных объектов), либо сами объекты в виде списка,
+    // даже если удален лишь один объект
+    List<Author> removeById(Long id);
+
     List<Author> findAllByLastNameStartingWith(String firstLetter);
     List<Author> findAllByFirstNameStartingWith(String firstLetter);
     List<Author> findAllByOrderByLastName();
