@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.services.implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +15,10 @@ import java.util.List;
  */
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class GenreServiceImpl implements GenreService {
 
-    private GenreRepository genreRepository;
-
-    @Autowired
-    public void setGenreRepository(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
+    private final GenreRepository genreRepository;
 
     @Override
     @Transactional

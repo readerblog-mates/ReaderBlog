@@ -179,7 +179,7 @@ DROP TABLE IF EXISTS key_words;
 CREATE TABLE key_words
 (
     id   BIGSERIAL PRIMARY KEY,
-    word VARCHAR(255)
+    word VARCHAR(255) NOT NULL
 );
 INSERT INTO key_words(word)
 values ('child'),

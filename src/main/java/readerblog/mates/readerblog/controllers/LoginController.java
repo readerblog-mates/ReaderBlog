@@ -10,7 +10,6 @@ public class LoginController {
         return "login";
     }
 
-
     @GetMapping("/signup")
     public String showMySignUpPage() {
         return "registration-form";}

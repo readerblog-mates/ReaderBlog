@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,11 @@ import readerblog.mates.readerblog.security.CurrentUser;
 import readerblog.mates.readerblog.security.UserPrincipal;
 
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")

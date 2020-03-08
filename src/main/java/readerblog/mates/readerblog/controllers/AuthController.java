@@ -1,5 +1,6 @@
 package readerblog.mates.readerblog.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -24,20 +25,14 @@ import readerblog.mates.readerblog.security.TokenProvider;
 import javax.validation.Valid;
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private TokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/login")
     public String authenticateUser(@Valid LoginRequest loginRequest) {
@@ -85,5 +80,4 @@ public class AuthController {
         return "index";
 
     }
-
 }
