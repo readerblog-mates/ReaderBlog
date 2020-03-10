@@ -66,13 +66,13 @@ VALUES ('Admin', 'Admin', 'admin', '100', 'admin@gmail.com');
 
 
 CREATE TABLE users_roles (
-     user_id  BIGSERIAL NOT NULL,
-     role_id   SERIAL NOT NULL,
-    PRIMARY KEY (user_id,role_id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
-    ON DELETE NO ACTION ON UPDATE NO ACTION,
-    FOREIGN KEY (role_id)  REFERENCES roles (id)
-    ON DELETE NO ACTION ON UPDATE NO ACTION
+                             user_id  BIGSERIAL NOT NULL,
+                             role_id   SERIAL NOT NULL,
+                             PRIMARY KEY (user_id,role_id),
+                             FOREIGN KEY (user_id) REFERENCES users (id)
+                                 ON DELETE NO ACTION ON UPDATE NO ACTION,
+                             FOREIGN KEY (role_id)  REFERENCES roles (id)
+                                 ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ;
 
 INSERT INTO users_roles (user_id, role_id)

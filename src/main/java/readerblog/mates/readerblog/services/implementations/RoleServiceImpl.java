@@ -1,10 +1,11 @@
-package readerblog.mates.readerblog.services;
+package readerblog.mates.readerblog.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import readerblog.mates.readerblog.model.Role;
-import readerblog.mates.readerblog.model.User;
-import readerblog.mates.readerblog.repository.RoleRepository;
+import readerblog.mates.readerblog.entities.Role;
+import readerblog.mates.readerblog.repositories.RoleRepository;
+import readerblog.mates.readerblog.services.RoleService;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -13,7 +14,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public Role findById(int id) {
+    public Role findById(Long id) {
         return roleRepository.findById(id).orElse(null);
     }
+
 }

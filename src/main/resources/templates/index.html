@@ -19,43 +19,30 @@
 
 <div class="container">
 
+    <div th:replace="~{navigation :: navigation(Home)}"/>
+
     <br>
-    <h1>Reader Blog</h1>
-    <h2>release-rb-N1</h2>
-    <div class="panel panel-info">
 
-        <span th:text="Привет + ${ msg}" th:unless="${msg == null}"></span>
-
-
+    <div class="row justify-content-center h-100">
+        <h2 class="text-center col-8" th:text="#{index.header}"></h2>
+        <p class="text-success text-center col-8" th:text="#{index.header2}"></p>
+        <p class="text-center col-8 " th:text="#{index.p1}"></p>
+        <p class="text-center col-8 " th:text="#{index.p2}"></p>
+        <p class="text-success text-center col-8 ">
+            <b th:text="#{index.p3}"></b>
+        </p>
     </div>
-    <div class="panel panel-info">
 
-        <div sec:authentication property="principal.username"></div>
-
-        <div sec:authorize="isAuthenticated()">
-            Authenticated as <span sec:authentication="name"></span>
-            <div sec:authentication property="principal.username"></div>
-            <div sec:authentication property="principal.credentials"></div>
-            <span sec:authentication="principal.authorities"></span>
-
+    <div class="row">
+        <div class="col text-center">
+            <a type="button" class="btn btn-dark" th:href="@{/myblog}" th:text="#{nav.myblog}"></a>
+            <a type="button" class="btn btn-outline-dark" th:href="@{/choose}" th:text="#{nav.choose}"></a>
         </div>
+    </div>
+    <br>
 
-        _______________________________________________
-        <div th:text="${#authentication.name}" ></div>
-        ______________________________________________
-        <div th:text="${#session.getAttribute('user')}" th:unless="${#session == null}"></div>
+    <div th:replace="~{footer::footer}"/>
 
-    </div>
-    <div class="row">
-        <a  th:href="@{/signup}"><h3>SignUp</h3></a>
-
-    </div>
-    <div class="row">
-        <a  th:href="@{/signin}"><h3>SignIn</h3></a>
-    </div>
-    <div sec:authorize="isAuthenticated()">
-        <a th:href="@{/logout}" class="nav-link text-left">Logout</a>
-    </div>
 </div>
 </body>
 </html>

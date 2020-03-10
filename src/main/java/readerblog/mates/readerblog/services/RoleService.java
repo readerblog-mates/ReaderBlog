@@ -1,8 +1,8 @@
 package readerblog.mates.readerblog.services;
 
-import readerblog.mates.readerblog.model.Role;
-import readerblog.mates.readerblog.model.User;
+
+import readerblog.mates.readerblog.entities.Role;
 
 public interface RoleService {
-    public Role findById(int id);
+    public Role findById(Long id);
 }

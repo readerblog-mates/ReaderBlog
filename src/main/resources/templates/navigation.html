@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="navigation(activeTab)">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="mx-auto order-1">
+            <a class="navbar-brand mx-auto" th:href="@{/}">ReaderBlog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'myblog' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/myblog}" th:text="#{nav.myblog}"><span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'books' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/books}" th:text="#{nav.books}"></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'authors' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/authors}" th:text="#{nav.authors}"></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'ratings' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/ratings}" th:text="#{nav.ratings}"></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'choose' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/choose}" th:text="#{nav.choose}"></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:classappend="${activeTab == 'profile' ? ' active' : ''}">
+                    <a class="nav-link" th:href="@{/profile}" th:text="#{nav.profile}"></a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <form th:action="@{/logout}" method="POST">
+                        <input type="submit" class="btn btn-outline-light" th:value="#{nav.logout}"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="dropdown" style="margin-left: 10px;" sec:authorize="isAnonymous()">
+                <button class="btn btn-outline-secondary dropdown-toggle" th:text="#{nav.login}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:href="@{/login}" th:text="#{nav.login}"></a>
+                    <a class="dropdown-item" th:href="@{/signup}" th:text="#{nav.signup}"></a>
+                </div>
+            </div>
+            <div class="dropdown" style="margin-left: 10px;">
+                <button class="btn btn-outline-secondary dropdown-toggle" th:text="#{nav.lang}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:href="@{/?lang=ru}">РУС</a>
+                    <a class="dropdown-item" th:href="@{/?lang=en}">ENG</a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</div>
+</body>
+</html>

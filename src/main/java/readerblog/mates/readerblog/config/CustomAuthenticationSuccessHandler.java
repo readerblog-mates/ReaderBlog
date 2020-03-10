@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import readerblog.mates.readerblog.model.User;
+import readerblog.mates.readerblog.entities.User;
 import readerblog.mates.readerblog.payload.AuthResponse;
 import readerblog.mates.readerblog.security.TokenProvider;
 import readerblog.mates.readerblog.security.UserPrincipal;
