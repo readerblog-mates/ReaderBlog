@@ -36,5 +36,6 @@ public interface UserService {
 
     List<User> findByStatus(StatusOfUser status);
     User findByEmail(String email);
+    User findByProviderId(String providerId);
 
 }

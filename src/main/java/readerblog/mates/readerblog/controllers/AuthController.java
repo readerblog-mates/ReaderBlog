@@ -4,13 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import readerblog.mates.readerblog.entities.Role;
 import readerblog.mates.readerblog.entities.User;
 import readerblog.mates.readerblog.enums.AuthProvider;
 import readerblog.mates.readerblog.exception.BadRequestException;
@@ -19,7 +22,9 @@ import readerblog.mates.readerblog.payload.AuthResponse;
 import readerblog.mates.readerblog.payload.LoginRequest;
 import readerblog.mates.readerblog.payload.SignUpRequest;
 import readerblog.mates.readerblog.repositories.UserRepository;
+import readerblog.mates.readerblog.security.CustomUserDetailsService;
 import readerblog.mates.readerblog.security.TokenProvider;
+import readerblog.mates.readerblog.services.RoleService;
 
 import javax.validation.Valid;
 
@@ -39,8 +44,15 @@ public class AuthController {
     @Autowired
     private TokenProvider tokenProvider;
 
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+
+
     @PostMapping("/login")
-    public String authenticateUser(@Valid LoginRequest loginRequest) {
+    public String authenticateUser(@Valid LoginRequest loginRequest) throws BadCredentialsException {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -69,10 +81,20 @@ public class AuthController {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.LOCAL);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        Role role = roleService.findById(1L);
+        user.addRole(role);
         User result = userRepository.save(user);
+        String email = signUpRequest.getEmail();
+        User res1 = userRepository.findByEmail(email).orElse(null);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(signUpRequest.getEmail());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signUpRequest.getEmail(),
+                        signUpRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         model.addAttribute("msg", result.getFirstName());
 //        Если нужно вернуть ResponseEntity
 //        URI location = ServletUriComponentsBuilder
@@ -84,6 +106,10 @@ public class AuthController {
 
         return "index";
 
+    }
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public String exception(BadCredentialsException ex) {
+        return  "redirect:/signin?error";
     }
 
 }
