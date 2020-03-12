@@ -24,20 +24,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteByEmail(String email) {
-        if (email == null)
-            return null;
-        else return repository.deleteByEmail(email);
+    public void deleteByEmail(String email) {
+         repository.deleteByEmail(email);
     }
 
     @Override
-    public User deleteById(Long id) {
-        Optional<User> user = repository.findById(id);
-        if (user.isPresent()){
-            repository.deleteById(id);
-            return user.get();
-        }
-        return null;
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 
     @Override
@@ -90,4 +83,12 @@ public class UserServiceImpl implements UserService {
         else return repository.findByEmail(email).get();
     }
 
+    public User findByEmail(String email) {
+        return repository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User findByProviderId(String providerId) {
+        return repository.findByProviderId(providerId).orElse(null);
+    }
 }

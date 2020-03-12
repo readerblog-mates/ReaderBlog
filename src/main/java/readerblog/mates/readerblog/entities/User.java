@@ -9,9 +9,7 @@ import readerblog.mates.readerblog.enums.StatusOfUser;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Sergey Petukhov
@@ -57,11 +55,11 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusOfUser status;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    private Collection<Role> roles = new HashSet<>();
 
     private String imageUrl;
 
@@ -69,7 +67,9 @@ public class User implements Serializable {
     private AuthProvider provider;
 
     private String providerId;
-
+    public void addRole(Role role) {
+        getRoles().add(role);
+    }
 
     /**
      * @return - information about user by nick
@@ -83,6 +83,7 @@ public class User implements Serializable {
         /*info.put("role", StatusOfUser.valueOf("name").toString());*/
         return info;
     }
+
 
 }
 
