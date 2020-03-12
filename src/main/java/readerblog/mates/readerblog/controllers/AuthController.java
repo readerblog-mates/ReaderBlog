@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import readerblog.mates.readerblog.entities.Role;
 import readerblog.mates.readerblog.entities.User;
@@ -111,5 +112,7 @@ public class AuthController {
     public String exception(BadCredentialsException ex) {
         return  "redirect:/signin?error";
     }
+
+
 
 }
